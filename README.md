@@ -12,7 +12,7 @@ V & V project.
 
 
 ## Resources
-- Spoon
+- Javassist
 
 ## Target project
 - Simple project with basic operations [https://github.com/Jnsll/MockMathSoftware]
