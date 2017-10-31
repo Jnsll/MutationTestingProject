@@ -2,6 +2,7 @@ package com.istic.tp;
 
 
 import com.istic.tp.boolexpr.Editor;
+import com.istic.tp.operone.EditorJ;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
@@ -26,21 +27,24 @@ public class App
         URL classUrl = new URL("file://"+args[0]+"/target/test-classes/");
         URL classUrlsrc = new URL("file://"+args[0]+"/target/classes/");
         URL[] urls = { classUrl,classUrlsrc };
-        Editor test =new Editor();
-        test.editor(urls,args[0]+"/target/classes/");
+
+        //tests Afe
+        Editor afe =new Editor();
+        afe.editor(urls,args[0]+"/target/classes/");
+
+        //tests June
+        EditorJ june =new EditorJ(args[0]);
+        june.editor(urls);
 
 
-        // Test
+        // Test project target
         JUnitCore jUnitCore = new JUnitCore();
         URLClassLoader url = new URLClassLoader(urls);
-
-
         final File folder = new File(args[0]+"/target/test-classes/");
         listFilesForFolder(folder,jUnitCore,url,args[0]);
 
 
     }
-
 
     public static void listFilesForFolder(final File folder,final JUnitCore jUnitCore, final URLClassLoader urlclass,String args ) throws ClassNotFoundException {
 
