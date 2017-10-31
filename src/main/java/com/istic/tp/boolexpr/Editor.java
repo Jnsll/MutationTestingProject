@@ -8,13 +8,14 @@ import javassist.bytecode.Opcode;
 import javassist.expr.ExprEditor;
 import javassist.expr.MethodCall;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
 
 public class Editor {
 
-    public void editor(URL[] urls) throws NotFoundException, CannotCompileException, MalformedURLException {
+    public void editor(URL[] urls) throws NotFoundException, CannotCompileException, IOException {
 
         ClassPool pool = ClassPool.getDefault();
         for (int i = 0; i < urls.length; i++) {
@@ -28,8 +29,10 @@ public class Editor {
         CtClass cc = pool.get("fr.istic.vv.afe.MathAfe");
         CtMethod cm = cc.getDeclaredMethod("add");
         System.out.println(cm.getLongName());
+        cm.insertBefore("{x=x+5;}");
+        cc.writeFile("/home/aferey/Documents/VV/MockMathSoftware/target/classes/");
 
-       /* cm.instrument(
+      /* cm.instrument(
                 new ExprEditor() {
                     public void edit(MethodCall m)
                             throws CannotCompileException
@@ -59,6 +62,7 @@ public class Editor {
             System.out.println(iterator.get());
             System.out.println(pos);
         }
+
 
 
     }
