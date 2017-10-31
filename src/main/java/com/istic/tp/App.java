@@ -38,7 +38,7 @@ public class App
         june.editor(urls);
 
         //test Elo
-        EditorComparisation editorComparisation = new EditorComparisation();
+        EditorComparisation editorComparisation = new EditorComparisation(args[0]);
         editorComparisation.editor(urls);
 
 

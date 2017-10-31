@@ -13,6 +13,12 @@ import java.net.URL;
 
 public class EditorComparisation {
 
+    private String directory;
+
+    public EditorComparisation(String directory) {
+        this.directory = directory;
+    }
+
     public void editor(URL[] urls) throws NotFoundException, CannotCompileException, MalformedURLException {
         ClassPool pool = ClassPool.getDefault();
 
@@ -36,7 +42,7 @@ public class EditorComparisation {
 
         // re-write file
         try {
-            cc.writeFile("/home/eloisance/workspace/vandv/MockMathSoftware/target/classes/");
+            cc.writeFile(directory + "/target/classes/");
         } catch (IOException e) {
             e.printStackTrace();
         }
