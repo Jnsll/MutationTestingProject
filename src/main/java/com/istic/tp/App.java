@@ -2,6 +2,7 @@ package com.istic.tp;
 
 
 import com.istic.tp.boolexpr.Editor;
+import com.istic.tp.comparisonexpr.EditorComparisation;
 import com.istic.tp.operone.EditorJ;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
@@ -35,6 +36,10 @@ public class App
         //tests June
         EditorJ june =new EditorJ(args[0]);
         june.editor(urls);
+
+        //test Elo
+        EditorComparisation editorComparisation = new EditorComparisation();
+        editorComparisation.editor(urls);
 
 
         // Test project target
