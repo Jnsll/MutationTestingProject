@@ -27,7 +27,7 @@ public class App
         URL classUrlsrc = new URL("file://"+args[0]+"/target/classes/");
         URL[] urls = { classUrl,classUrlsrc };
         Editor test =new Editor();
-        test.editor(urls);
+        test.editor(urls,args[0]+"/target/classes/");
 
 
         // Test
