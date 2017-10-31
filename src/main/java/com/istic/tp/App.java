@@ -2,6 +2,7 @@ package com.istic.tp;
 
 
 import com.istic.tp.boolexpr.Editor;
+import com.istic.tp.operone.EditorJ;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
@@ -33,14 +34,11 @@ public class App
         // Test
         JUnitCore jUnitCore = new JUnitCore();
         URLClassLoader url = new URLClassLoader(urls);
-
-
         final File folder = new File(args[0]+"/target/test-classes/");
         listFilesForFolder(folder,jUnitCore,url,args[0]);
 
 
     }
-
 
     public static void listFilesForFolder(final File folder,final JUnitCore jUnitCore, final URLClassLoader urlclass,String args ) throws ClassNotFoundException {
 
