@@ -4,6 +4,7 @@ import javassist.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
@@ -20,11 +21,16 @@ public abstract class AbstractEditor {
      */
     final ClassPool pool;
 
-    public AbstractEditor(String path, URL[] urls) {
+    public AbstractEditor(String path) {
         this.path = path+"/target/classes/";
 
         this.pool = ClassPool.getDefault();
-
+        URL[] urls = new URL[0];
+        try {
+            urls = new URL[]{ new URL("file://"+path+"/target/test-classes/"),new URL("file://"+path+"/target/classes/") };
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
         for (int i = 0; i < urls.length; i++) {
             try {
 

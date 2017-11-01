@@ -3,17 +3,14 @@ package com.istic.tp.operatorexpr;
 import javassist.CtMethod;
 import javassist.bytecode.BadBytecode;
 import javassist.bytecode.CodeIterator;
-import javassist.bytecode.MethodInfo;
 import javassist.bytecode.Mnemonic;
 
-import java.net.URL;
+
+public class EditorArthOperator extends AbstractEditor {
 
 
-public class EditorOperator extends AbstractEditor {
-
-
-    public EditorOperator(String path, URL[] urls) {
-        super(path, urls);
+    public EditorArthOperator(String path) {
+        super(path);
     }
 
     @Override
