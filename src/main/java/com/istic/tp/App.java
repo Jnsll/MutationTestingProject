@@ -1,20 +1,17 @@
 package com.istic.tp;
 
 
-import com.istic.tp.boolexpr.Editor;
+import com.istic.tp.operatorexpr.AbstractEditor;
+import com.istic.tp.operatorexpr.EditorOperator;
 import com.istic.tp.comparisonexpr.EditorComparisation;
 import com.istic.tp.operone.EditorJ;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
-import org.reflections.Reflections;
 
 import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.Set;
-
-import static com.istic.tp.App.listFilesForFolder;
 
 /**
  * Hello world!
@@ -30,8 +27,8 @@ public class App
         URL[] urls = { classUrl,classUrlsrc };
 
         //tests Afe
-        Editor afe =new Editor();
-        afe.editor(urls,args[0]+"/target/classes/");
+        AbstractEditor afe =new EditorOperator(args[0],urls);
+        afe.editor();
 
         //tests June
         EditorJ june =new EditorJ(args[0]);
