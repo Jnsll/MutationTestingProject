@@ -17,9 +17,13 @@ public class EditorJ extends AbstractEditor {
     @Override
     protected void replace(final CtMethod cm) {
         try {
-        System.out.println(cm.getLongName());
-        cm.setBody("{return true;}");
-
+            String returnType;
+            returnType = cm.getReturnType().getName();
+            //System.out.println(cm.getLongName() + "all methods");
+            if (returnType.equals("boolean") || returnType.equals("Boolean")) {
+                //System.out.println(cm.getLongName() + "boolean method");
+                cm.setBody("{return true;}");
+            }
         }catch(Throwable exc) {
             System.out.println("Oh, no! Something went wrong.");
             System.out.println(exc.getMessage());
