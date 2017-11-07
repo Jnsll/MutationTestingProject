@@ -50,7 +50,7 @@ public class App
 
         //tests June
         EditorJ june =new EditorJ(args[0]);
-        june.editor(urls);
+        june.editor();
 
         //test Elo
         EditorComparisation editorComparisation = new EditorComparisation(args[0]);
