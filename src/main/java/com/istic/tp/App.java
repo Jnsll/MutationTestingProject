@@ -53,10 +53,9 @@ public class App
         june.editor();
 
         //test Elo
-        EditorComparisation editorComparisation = new EditorComparisation(args[0]);
-        editorComparisation.editor(urls);
+        AbstractEditor editorComparisation = new EditorComparisation(projectTarget);
+        editorComparisation.editor();
 
-        projectTarget.launchTest();
 
 
 

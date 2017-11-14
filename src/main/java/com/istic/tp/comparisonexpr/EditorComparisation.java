@@ -1,64 +1,33 @@
 package com.istic.tp.comparisonexpr;
 
-import javassist.*;
+import com.istic.tp.ProjectTarget;
+import com.istic.tp.operatorexpr.AbstractEditor;
+import com.istic.tp.operatorexpr.BCOperator;
+import javassist.CtMethod;
 import javassist.bytecode.BadBytecode;
 import javassist.bytecode.CodeIterator;
-import javassist.bytecode.MethodInfo;
 import javassist.bytecode.Mnemonic;
-import javassist.expr.*;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
+public class EditorComparisation extends AbstractEditor {
 
-public class EditorComparisation {
-
-    private String directory;
-
-    public EditorComparisation(String directory) {
-        this.directory = directory;
+    public EditorComparisation(ProjectTarget target) {
+        super(target);
     }
 
-    public void editor(URL[] urls) throws NotFoundException, CannotCompileException, MalformedURLException {
-        ClassPool pool = ClassPool.getDefault();
-
-        for (int i = 0; i < urls.length; i++) {
-            try {
-                pool.insertClassPath(urls[i].getFile());
-            } catch (NotFoundException e) {
-                e.printStackTrace();
-            }
-        }
-
-        CtClass cc = pool.get("fr.istic.vv.elo.SampleELO");
-        CtMethod cm = cc.getDeclaredMethod("isBigger");
-        //System.out.println(cm.getLongName());
-
-        try {
-            getLatestArg(cm.getMethodInfo());
-        } catch (BadBytecode badBytecode) {
-            badBytecode.printStackTrace();
-        }
-
-        // re-write file
-        try {
-            cc.writeFile(directory + "/target/classes/");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    private void getLatestArg(MethodInfo info) throws BadBytecode {
-        CodeIterator iterator = info.getCodeAttribute().iterator();
+    @Override
+    protected void replace(CtMethod method) {
+        CodeIterator iterator = method.getMethodInfo().getCodeAttribute().iterator();
         while (iterator.hasNext()) {
-            int index = iterator.next();
-            int op = iterator.byteAt(index);
-            if (Mnemonic.OPCODE[op].equals("if_icmple")) {
-                iterator.writeByte(161, index);
+            int index = 0;
+            try {
+                index = iterator.next();
+            } catch (BadBytecode badBytecode) {
+                badBytecode.printStackTrace();
             }
-           // System.out.println(Mnemonic.OPCODE[op]);
+            int op = iterator.byteAt(index);
+            if(BCOperatorComparison.asByteCode(Mnemonic.OPCODE[op])) {
+                iterator.writeByte(BCOperator.valueOf(Mnemonic.OPCODE[op]).replace().getConstant(), index);
+            }
         }
-
     }
 }
