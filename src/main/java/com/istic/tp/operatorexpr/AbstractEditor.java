@@ -1,5 +1,6 @@
 package com.istic.tp.operatorexpr;
 
+import com.istic.tp.ProjectTarget;
 import javassist.*;
 
 import java.io.File;
@@ -14,26 +15,29 @@ public abstract class AbstractEditor {
     /**
      * path of class from target project
      */
-    final String path;
+    final protected ProjectTarget target;
 
     /**
      *ClassPool of target project
      */
-    final ClassPool pool;
+    final protected ClassPool pool;
+    /**
+     * copy de la methode avant modif
+     */
+    protected CtMethod copy;
 
-    public AbstractEditor(String path) {
-        this.path = path+"/target/classes/";
+    public AbstractEditor(ProjectTarget target) {
+        this.target = target;
 
         this.pool = ClassPool.getDefault();
         URL[] urls = new URL[0];
         try {
-            urls = new URL[]{ new URL("file://"+path+"/target/test-classes/"),new URL("file://"+path+"/target/classes/") };
+            urls = new URL[]{ new URL("file://"+this.target.getPathsrc()),new URL("file://"+this.target.getPathsrcTest()) };
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
         for (int i = 0; i < urls.length; i++) {
             try {
-
                 pool.insertClassPath(urls[i].getFile());
             } catch (NotFoundException e) {
                 e.printStackTrace();
@@ -46,7 +50,7 @@ public abstract class AbstractEditor {
      */
     public void editor() {
 
-        final File folder = new File(path);
+        final File folder = new File(this.target.getPathsrc());
         try {
             this.recursiveFileEditor(folder);
         } catch (ClassNotFoundException e) {
@@ -62,14 +66,13 @@ public abstract class AbstractEditor {
      */
     public void editor(final String nameclass)  {
 
-
-
         try {
             CtClass cc = pool.get(nameclass);
             for(CtMethod ct : cc.getDeclaredMethods()){
+                copy = CtNewMethod.copy(ct,ct.getDeclaringClass(),null);
                 replace(ct);
             }
-            cc.writeFile(path);
+            cc.writeFile(this.target.getPathsrc());
             cc.defrost(); // modifiable again
         } catch (NotFoundException e) {
             e.printStackTrace();
@@ -86,8 +89,17 @@ public abstract class AbstractEditor {
      *
      * @param method
      */
+
     protected abstract void replace(final CtMethod method) ;
 
+    protected void revert(CtMethod ct){
+        try {
+            ct.setBody(copy,null);
+        } catch (CannotCompileException e) {
+            e.printStackTrace();
+        }
+
+    }
 
     /**
      *
@@ -103,7 +115,7 @@ public abstract class AbstractEditor {
 
 
                 String name = fileEntry.toString()
-                        .replace(path,"")
+                        .replace(this.target.getPathsrc(),"")
                         .replaceAll(".class","")
                         .replaceAll("/",".");
                 editor(name);

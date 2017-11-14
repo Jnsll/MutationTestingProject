@@ -1,12 +1,16 @@
 package com.istic.tp.operatorexpr;
 
+import com.istic.tp.ProjectTarget;
 import javassist.CannotCompileException;
 import javassist.CtMethod;
 import javassist.NotFoundException;
+import javassist.bytecode.BadBytecode;
+import javassist.bytecode.CodeIterator;
+import javassist.bytecode.Mnemonic;
 
 public class EditorVoidMethod extends AbstractEditor {
-    public EditorVoidMethod(String path) {
-        super(path);
+    public EditorVoidMethod(ProjectTarget target) {
+        super(target);
     }
 
     @Override
@@ -27,7 +31,21 @@ public class EditorVoidMethod extends AbstractEditor {
             } catch (CannotCompileException e) {
                 e.printStackTrace();
             }
+            CodeIterator ci = method.getMethodInfo().getCodeAttribute().iterator();
+            while (ci.hasNext()) {
+                int index = 0;
+                try {
+
+                    index = ci.next();
+                    System.out.println("void:"+method.getName()+":"+index);
+                } catch (BadBytecode badBytecode) {
+                    badBytecode.printStackTrace();
+                }
+
+            }
         }
+
+
 
     }
 }

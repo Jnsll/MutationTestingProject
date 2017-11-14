@@ -42,14 +42,14 @@ public class App
 
 
         //tests Afe
-        AbstractEditor afe =new EditorArthOperator(args[0]);
+        AbstractEditor afe =new EditorArthOperator(projectTarget);
         afe.editor();
 
-        AbstractEditor afe2 =new EditorVoidMethod(args[0]);
+        AbstractEditor afe2 =new EditorVoidMethod(projectTarget);
         afe2.editor();
 
         //tests June
-        EditorJ june =new EditorJ(args[0]);
+        AbstractEditor june =new EditorJ(projectTarget);
         june.editor();
 
         //test Elo

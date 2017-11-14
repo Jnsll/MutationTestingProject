@@ -32,7 +32,7 @@ public class EditorComparisation {
 
         CtClass cc = pool.get("fr.istic.vv.elo.SampleELO");
         CtMethod cm = cc.getDeclaredMethod("isBigger");
-        System.out.println(cm.getLongName());
+        //System.out.println(cm.getLongName());
 
         try {
             getLatestArg(cm.getMethodInfo());
@@ -57,7 +57,7 @@ public class EditorComparisation {
             if (Mnemonic.OPCODE[op].equals("if_icmple")) {
                 iterator.writeByte(161, index);
             }
-            System.out.println(Mnemonic.OPCODE[op]);
+           // System.out.println(Mnemonic.OPCODE[op]);
         }
 
     }

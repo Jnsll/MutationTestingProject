@@ -8,8 +8,6 @@ public enum BCOperator {
     fadd(98),
     dadd(99),
 
-
-
     imul(104),
     lmul(105),
     fmul(106),

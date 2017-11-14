@@ -1,5 +1,6 @@
 package com.istic.tp.operone;
 
+import com.istic.tp.ProjectTarget;
 import com.istic.tp.operatorexpr.AbstractEditor;
 import javassist.*;
 
@@ -10,8 +11,8 @@ import java.net.URL;
 public class EditorJ extends AbstractEditor {
 
 
-    public EditorJ(String path) {
-        super(path);
+    public EditorJ(ProjectTarget target) {
+        super(target);
     }
 
     @Override
@@ -22,6 +23,7 @@ public class EditorJ extends AbstractEditor {
             //System.out.println(cm.getLongName() + "all methods");
             if (returnType.equals("boolean") || returnType.equals("Boolean")) {
                 //System.out.println(cm.getLongName() + "boolean method");
+
                 cm.setBody("{return true;}");
             }
         }catch(Throwable exc) {

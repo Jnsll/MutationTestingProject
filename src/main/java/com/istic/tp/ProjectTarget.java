@@ -13,15 +13,15 @@ public class ProjectTarget {
     /**
      *
      */
-    JUnitCore jUnitCore;
+    private JUnitCore jUnitCore;
     /**
      * path of target project
      */
-    String path;
+    private String path;
     /**
      *
      */
-    URLClassLoader url;
+    private URLClassLoader url;
 
     public ProjectTarget(String path) {
         this.path = path;
@@ -74,5 +74,13 @@ public class ProjectTarget {
 
             }
         }
+    }
+
+    public String getPathsrc(){
+        return this.path+"/target/classes/";
+    }
+
+    public String getPathsrcTest(){
+        return this.path+"/target/test-classes/";
     }
 }
