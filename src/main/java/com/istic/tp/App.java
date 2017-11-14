@@ -54,7 +54,7 @@ public class App
 
         //test Elo
         EditorComparisation editorComparisation = new EditorComparisation(args[0]);
-        editorComparisation.editor(urls);
+        editorComparisation.editor();
 
         projectTarget.launchTest();
 
