@@ -8,10 +8,10 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class EditorJ extends AbstractEditor {
+public class EditorBooleanMethod extends AbstractEditor {
 
 
-    public EditorJ(ProjectTarget target) {
+    public EditorBooleanMethod(ProjectTarget target) {
         super(target);
     }
 
@@ -26,6 +26,8 @@ public class EditorJ extends AbstractEditor {
 
                 cm.setBody("{return true;}");
             }
+            this.target.launchTest();
+            this.revert(cm);
         }catch(Throwable exc) {
             System.out.println("Oh, no! Something went wrong.");
             System.out.println(exc.getMessage());
