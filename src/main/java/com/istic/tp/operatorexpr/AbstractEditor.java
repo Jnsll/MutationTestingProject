@@ -2,6 +2,9 @@ package com.istic.tp.operatorexpr;
 
 import com.istic.tp.ProjectTarget;
 import javassist.*;
+import javassist.bytecode.BadBytecode;
+import javassist.bytecode.CodeIterator;
+import javassist.bytecode.Mnemonic;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,7 +16,7 @@ import java.net.URL;
  */
 public abstract class AbstractEditor {
     /**
-     * path of class from target project
+     * target Project
      */
     final protected ProjectTarget target;
 
@@ -22,7 +25,7 @@ public abstract class AbstractEditor {
      */
     final protected ClassPool pool;
     /**
-     * copy de la methode avant modif
+     * copy of method before update
      */
     protected CtMethod copy;
 
@@ -69,19 +72,32 @@ public abstract class AbstractEditor {
         try {
             CtClass cc = pool.get(nameclass);
             for(CtMethod ct : cc.getDeclaredMethods()){
-                copy = CtNewMethod.copy(ct,ct.getDeclaringClass(),null);
+                copy = CtNewMethod.copy(ct,cc,null);
                 replace(ct);
             }
-            cc.writeFile(this.target.getPathsrc());
-            cc.defrost(); // modifiable again
         } catch (NotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
             e.printStackTrace();
         } catch (CannotCompileException e) {
             e.printStackTrace();
         }
 
+
+    }
+
+    /**
+     * Writes a class file represented by this CtClass cc
+     * @param cc class modif
+     */
+    protected void write(CtClass cc){
+        try {
+            cc.writeFile(this.target.getPathsrc());
+            cc.defrost(); // modifiable again
+
+        } catch (CannotCompileException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -92,14 +108,23 @@ public abstract class AbstractEditor {
 
     protected abstract void replace(final CtMethod method) ;
 
+    /**
+     * revert CtMethod ct before update
+     * @param ct
+     */
     protected void revert(CtMethod ct){
+
         try {
             ct.setBody(copy,null);
         } catch (CannotCompileException e) {
             e.printStackTrace();
         }
 
+        this.write(ct.getDeclaringClass());
+
     }
+
+
 
     /**
      *

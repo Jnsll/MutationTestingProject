@@ -12,10 +12,10 @@ public enum BCOperatorComparison {
      *
      */
 
-    icmplt(161), // <  : if value1 is less than value2
-    icmpgt(163), // >  : if value1 is greater than value2
-    icmple(164), // <= : if value1 is less than or equal to value2
-    icmpge(162); // >= : if value1 is greater than or equal to value2
+    if_icmplt(161), // <  : if value1 is less than value2
+    if_icmpgt(163), // >  : if value1 is greater than value2
+    if_icmple(164), // <= : if value1 is less than or equal to value2
+    if_icmpge(162); // >= : if value1 is greater than or equal to value2
 
     private int constant;
 
