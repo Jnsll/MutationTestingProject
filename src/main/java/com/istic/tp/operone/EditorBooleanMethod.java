@@ -16,15 +16,19 @@ public class EditorBooleanMethod extends AbstractEditor {
     }
 
     @Override
-    protected void replace(final CtMethod cm) {
+    protected void replace(final CtMethod method) {
         try {
             String returnType;
-            returnType = cm.getReturnType().getName();
+            returnType = method.getReturnType().getName();
             //System.out.println(cm.getLongName() + "all methods");
             if (returnType.equals("boolean") || returnType.equals("Boolean")) {
                 //System.out.println(cm.getLongName() + "boolean method");
 
-                cm.setBody("{return true;}");
+                method.setBody("{return true;}");
+                System.out.println("MUTANT june: "+method.getName()+":"+"boolean");
+                this.write(method.getDeclaringClass()); // on enregistre les modif
+                this.target.launchTest(); // on lance les tests
+                this.revert(method); // on remet a l'etat initial
             }
             this.target.launchTest();
             this.revert(cm);

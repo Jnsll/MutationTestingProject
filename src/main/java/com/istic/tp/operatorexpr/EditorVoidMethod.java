@@ -28,21 +28,14 @@ public class EditorVoidMethod extends AbstractEditor {
             }
             try {
                 method.setBody("{}");
+                System.out.println("MUTANT antoine: "+method.getName()+":"+"void");
+                this.write(method.getDeclaringClass()); // on enregistre les modif
+                this.target.launchTest(); // on lance les tests
+                this.revert(method); // on remet a l'etat initial
             } catch (CannotCompileException e) {
                 e.printStackTrace();
             }
-            CodeIterator ci = method.getMethodInfo().getCodeAttribute().iterator();
-            while (ci.hasNext()) {
-                int index = 0;
-                try {
 
-                    index = ci.next();
-                    System.out.println("void:"+method.getName()+":"+index);
-                } catch (BadBytecode badBytecode) {
-                    badBytecode.printStackTrace();
-                }
-
-            }
         }
 
 

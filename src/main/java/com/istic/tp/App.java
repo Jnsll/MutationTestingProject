@@ -3,7 +3,7 @@ package com.istic.tp;
 
 import com.istic.tp.comparisonexpr.EditorComparisation;
 import com.istic.tp.operatorexpr.AbstractEditor;
-import com.istic.tp.operatorexpr.EditorArthOperator;
+import com.istic.tp.operatorexpr.EditorArithOperator;
 import com.istic.tp.operatorexpr.EditorVoidMethod;
 import com.istic.tp.operone.EditorBooleanMethod;
 
@@ -40,9 +40,11 @@ public class App
 
         ProjectTarget projectTarget = new ProjectTarget(args[0]);
 
-
+        if(!projectTarget.build()){
+            return;
+        }
         //tests Afe
-        AbstractEditor afe =new EditorArthOperator(projectTarget);
+        AbstractEditor afe =new EditorArithOperator(projectTarget);
         afe.editor();
 
         AbstractEditor afe2 =new EditorVoidMethod(projectTarget);

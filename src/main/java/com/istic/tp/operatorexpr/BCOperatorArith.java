@@ -1,6 +1,6 @@
 package com.istic.tp.operatorexpr;
 
-public enum BCOperator {
+public enum BCOperatorArith {
 
 
     iadd(96),
@@ -28,12 +28,12 @@ public enum BCOperator {
 
     private int constant;
 
-    BCOperator(int constant){
+    BCOperatorArith(int constant){
         this.constant=constant;
     }
 
-    public BCOperator replace(){
-        return BCOperator.values()[(this.ordinal()+8)% BCOperator.values().length];
+    public BCOperatorArith replace(){
+        return BCOperatorArith.values()[(this.ordinal()+8)% BCOperatorArith.values().length];
     }
 
     public int getConstant() {
@@ -41,7 +41,7 @@ public enum BCOperator {
     }
 
     public static boolean asByteCode(String str) {
-        for (BCOperator me : BCOperator.values()) {
+        for (BCOperatorArith me : BCOperatorArith.values()) {
             if (me.name().equalsIgnoreCase(str))
                 return true;
         }

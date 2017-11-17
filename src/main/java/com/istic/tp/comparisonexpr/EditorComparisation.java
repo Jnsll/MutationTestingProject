@@ -2,7 +2,6 @@ package com.istic.tp.comparisonexpr;
 
 import com.istic.tp.ProjectTarget;
 import com.istic.tp.operatorexpr.AbstractEditor;
-import com.istic.tp.operatorexpr.BCOperator;
 import javassist.CtMethod;
 import javassist.bytecode.BadBytecode;
 import javassist.bytecode.CodeIterator;
@@ -25,8 +24,14 @@ public class EditorComparisation extends AbstractEditor {
                 badBytecode.printStackTrace();
             }
             int op = iterator.byteAt(index);
+
             if(BCOperatorComparison.asByteCode(Mnemonic.OPCODE[op])) {
-                iterator.writeByte(BCOperator.valueOf(Mnemonic.OPCODE[op]).replace().getConstant(), index);
+
+                iterator.writeByte(BCOperatorComparison.valueOf(Mnemonic.OPCODE[op]).replace().getConstant(), index);
+                System.out.println("MUTANT emmanuel: "+method.getName()+":"+index);
+                this.write(method.getDeclaringClass()); // on enregistre les modif
+                this.target.launchTest(); // on lance les tests
+                this.revert(method); // on remet a l'etat initial
             }
         }
     }
