@@ -1,5 +1,6 @@
 package com.istic.tp.editor;
 
+import com.istic.tp.mutant.Mutant;
 import com.istic.tp.target.ProjectTarget;
 import javassist.*;
 
@@ -11,22 +12,15 @@ public class EditorBooleanMethod extends AbstractEditor {
     }
 
     @Override
-    protected void replace(final CtMethod method) {
+    protected void createListMutant(final CtMethod method) {
         try {
             String returnType;
             returnType = method.getReturnType().getName();
-            //System.out.println(cm.getLongName() + "all methods");
             if (returnType.equals("boolean") || returnType.equals("Boolean")) {
-                //System.out.println(cm.getLongName() + "boolean method");
-
-                method.setBody("{return true;}");
-                System.out.println("MUTANT june: "+method.getName()+":"+"boolean");
-                this.write(method.getDeclaringClass()); // on enregistre les modif
-                this.target.launchTest(); // on lance les tests
-                this.revert(method); // on remet a l'etat initial
+                this.mutants.add(new Mutant(method,null));
+//              System.out.println("MUTANT june: "+method.getName()+":"+"boolean");
             }
-            this.target.launchTest();
-            this.revert(method);
+
         }catch(Throwable exc) {
             System.out.println("Oh, no! Something went wrong.");
             System.out.println(exc.getMessage());
@@ -34,28 +28,15 @@ public class EditorBooleanMethod extends AbstractEditor {
         }
     }
 
+    @Override
+    protected void replace(Mutant mutant) {
+        try {
+            mutant.getCtMethod().setBody("{return true;}");
+            this.write(mutant.getCtMethod().getDeclaringClass());
+        } catch (CannotCompileException e) {
+            e.printStackTrace();
+        }
+    }
 
-//    public void editor(URL[] urls) throws NotFoundException, CannotCompileException, IOException {
-//        try {
-//            ClassPool pool = ClassPool.getDefault();
-//            for (int i = 0; i < urls.length; i++) {
-//                try {
-//
-//                    pool.insertClassPath(urls[i].getFile());
-//                } catch (NotFoundException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//            CtClass cc = pool.get("fr.istic.vv.june.OperatorOne");
-//            CtMethod cm = cc.getDeclaredMethod("doesAEqualTen");
-//            System.out.println(cm.getLongName());
-//            cm.setBody("{return true;}");
-//            cc.writeFile(path + "/target/classes/");
-//        }
-//        catch(Throwable exc) {
-//            System.out.println("Oh, no! Something went wrong.");
-//            System.out.println(exc.getMessage());
-//            exc.printStackTrace();
-//        }
-//    }
+
 }

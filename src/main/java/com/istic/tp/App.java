@@ -1,7 +1,7 @@
 package com.istic.tp;
 
 
-import com.istic.tp.editor.EditorComparisation;
+import com.istic.tp.editor.EditorComparison;
 import com.istic.tp.editor.AbstractEditor;
 import com.istic.tp.editor.EditorArithOperator;
 import com.istic.tp.editor.EditorVoidMethod;
@@ -45,19 +45,26 @@ public class App
             return;
         }
         //tests Afe
-        AbstractEditor afe =new EditorArithOperator(projectTarget);
-        afe.editor();
+        System.out.println("== Arith ==");
+        AbstractEditor arithOperator =new EditorArithOperator(projectTarget);
+        arithOperator.scan();
+        arithOperator.launch();
 
-        AbstractEditor afe2 =new EditorVoidMethod(projectTarget);
-        afe2.editor();
-
+        System.out.println("== Void ==");
+        AbstractEditor voidMethod =new EditorVoidMethod(projectTarget);
+        voidMethod.scan();
+        voidMethod.launch();
         //tests June
-        AbstractEditor june =new EditorBooleanMethod(projectTarget);
-        june.editor();
+        System.out.println("== Boolean ==");
+        AbstractEditor booleanMethod =new EditorBooleanMethod(projectTarget);
+        booleanMethod.scan();
+        booleanMethod.launch();
 
         //test Elo
-        AbstractEditor editorComparisation = new EditorComparisation(projectTarget);
-        editorComparisation.editor();
+        System.out.println("== Comparison ==");
+        AbstractEditor editorComparison = new EditorComparison(projectTarget);
+        editorComparison.scan();
+        editorComparison.launch();
 
 
 

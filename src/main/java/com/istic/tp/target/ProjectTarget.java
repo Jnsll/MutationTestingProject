@@ -93,6 +93,44 @@ public class ProjectTarget {
 
     }
 
+    public boolean clean(){
+        InvocationRequest request = new DefaultInvocationRequest();
+        File file = new File( this.path+"/pom.xml" );
+        if(!file.exists()){
+            System.err.println("the pom file : "+file.getPath()+" doesn't exist in "+this.path);
+            return false;
+        }
+        if(!this.clean()){
+            return false;
+        }
+        request.setPomFile(file);
+        request.setOutputHandler(line -> { // cache la sortie standard
+
+        });
+
+        List<String> option = new ArrayList<>();
+        option.add("clean");
+
+        request.setGoals( option );
+        Invoker invoker = new DefaultInvoker();
+        invoker.setMavenHome(new File("/usr"));
+
+        try
+        {
+            invoker.execute( request );
+        }
+        catch (MavenInvocationException e)
+        {
+            e.printStackTrace();
+            System.err.println("Clean fail for project "+this.path);
+            return false;
+        }
+
+        return true;
+
+
+    }
+
 
     private void recursiveLaunchTest(final File folder,final URLClassLoader url) throws ClassNotFoundException {
 

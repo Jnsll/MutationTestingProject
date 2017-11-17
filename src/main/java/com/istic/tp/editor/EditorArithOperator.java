@@ -1,5 +1,6 @@
 package com.istic.tp.editor;
 
+import com.istic.tp.mutant.Mutant;
 import com.istic.tp.target.ProjectTarget;
 import com.istic.tp.editor.bcoperator.BCOperatorArith;
 import javassist.CtMethod;
@@ -16,7 +17,7 @@ public class EditorArithOperator extends AbstractEditor {
     }
 
     @Override
-    protected void replace(final CtMethod method) {
+    protected void createListMutant(final CtMethod method) {
 
         CodeIterator ci = method.getMethodInfo().getCodeAttribute().iterator();
         while (ci.hasNext()) {
@@ -30,22 +31,19 @@ public class EditorArithOperator extends AbstractEditor {
             }
             int op = ci.byteAt(index);
             if(BCOperatorArith.asByteCode(Mnemonic.OPCODE[op])){
-                System.out.println("MUTANT antoine : "+method.getName()+":"+index);
-                ci.writeByte(BCOperatorArith.valueOf(Mnemonic.OPCODE[op]).replace().getConstant(),index);
-                this.write(method.getDeclaringClass()); // on enregistre les modif
-                this.target.launchTest(); // on lance les tests
-                this.revert(method); // on remet a l'etat initial
-
-
+//                System.out.println("MUTANT antoine : "+method.getName()+":"+index);
+                this.mutants.add(new Mutant(method, index));
             }
         }
-
-
-
-
     }
 
-
+    @Override
+    protected void replace(Mutant mutant) {
+        CodeIterator iterator = mutant.getCtMethod().getMethodInfo().getCodeAttribute().iterator();
+        int op = iterator.byteAt(mutant.getIndex());
+        iterator.writeByte(BCOperatorArith.valueOf(Mnemonic.OPCODE[op]).replace().getConstant(), mutant.getIndex());
+        this.write(mutant.getCtMethod().getDeclaringClass());
+    }
 
 
 }

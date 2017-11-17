@@ -1,5 +1,6 @@
 package com.istic.tp.editor;
 
+import com.istic.tp.mutant.Mutant;
 import com.istic.tp.target.ProjectTarget;
 import javassist.CannotCompileException;
 import javassist.CtMethod;
@@ -11,7 +12,7 @@ public class EditorVoidMethod extends AbstractEditor {
     }
 
     @Override
-    protected void replace(CtMethod method) {
+    protected void createListMutant(CtMethod method) {
         String returnType = "";
         try {
             returnType = method.getReturnType().getName();
@@ -23,19 +24,18 @@ public class EditorVoidMethod extends AbstractEditor {
             if(method.getLongName().contains(".main(java.lang.String[])")){ // don't replace main method body
                 return;
             }
-            try {
-                method.setBody("{}");
-                System.out.println("MUTANT antoine: "+method.getName()+":"+"void");
-                this.write(method.getDeclaringClass()); // on enregistre les modif
-                this.target.launchTest(); // on lance les tests
-                this.revert(method); // on remet a l'etat initial
-            } catch (CannotCompileException e) {
-                e.printStackTrace();
-            }
-
+            this.mutants.add(new Mutant(method,null));
+//          System.out.println("MUTANT antoine: "+method.getName()+":"+"void");
         }
+    }
 
-
-
+    @Override
+    protected void replace(Mutant mutant) {
+        try {
+            mutant.getCtMethod().setBody("{}");
+            this.write(mutant.getCtMethod().getDeclaringClass());
+        } catch (CannotCompileException e) {
+            e.printStackTrace();
+        }
     }
 }
