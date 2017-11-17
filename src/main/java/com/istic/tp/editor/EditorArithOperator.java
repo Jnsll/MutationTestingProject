@@ -1,6 +1,7 @@
-package com.istic.tp.operatorexpr;
+package com.istic.tp.editor;
 
-import com.istic.tp.ProjectTarget;
+import com.istic.tp.target.ProjectTarget;
+import com.istic.tp.editor.bcoperator.BCOperatorArith;
 import javassist.CtMethod;
 import javassist.bytecode.BadBytecode;
 import javassist.bytecode.CodeIterator;

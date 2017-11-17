@@ -1,10 +1,7 @@
-package com.istic.tp.operatorexpr;
+package com.istic.tp.editor;
 
-import com.istic.tp.ProjectTarget;
+import com.istic.tp.target.ProjectTarget;
 import javassist.*;
-import javassist.bytecode.BadBytecode;
-import javassist.bytecode.CodeIterator;
-import javassist.bytecode.Mnemonic;
 
 import java.io.File;
 import java.io.IOException;

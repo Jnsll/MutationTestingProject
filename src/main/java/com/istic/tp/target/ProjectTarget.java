@@ -1,4 +1,4 @@
-package com.istic.tp;
+package com.istic.tp.target;
 
 import org.apache.maven.shared.invoker.*;
 import org.junit.runner.JUnitCore;

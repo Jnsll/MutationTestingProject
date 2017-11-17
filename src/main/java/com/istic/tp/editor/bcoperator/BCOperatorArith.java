@@ -1,4 +1,4 @@
-package com.istic.tp.operatorexpr;
+package com.istic.tp.editor.bcoperator;
 
 public enum BCOperatorArith {
 

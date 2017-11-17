@@ -1,4 +1,4 @@
-package com.istic.tp.comparisonexpr;
+package com.istic.tp.editor.bcoperator;
 
 public enum BCOperatorComparison {
 

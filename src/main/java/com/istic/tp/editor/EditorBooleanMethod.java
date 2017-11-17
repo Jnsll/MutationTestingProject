@@ -1,12 +1,7 @@
-package com.istic.tp.operone;
+package com.istic.tp.editor;
 
-import com.istic.tp.ProjectTarget;
-import com.istic.tp.operatorexpr.AbstractEditor;
+import com.istic.tp.target.ProjectTarget;
 import javassist.*;
-
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 public class EditorBooleanMethod extends AbstractEditor {
 
@@ -31,7 +26,7 @@ public class EditorBooleanMethod extends AbstractEditor {
                 this.revert(method); // on remet a l'etat initial
             }
             this.target.launchTest();
-            this.revert(cm);
+            this.revert(method);
         }catch(Throwable exc) {
             System.out.println("Oh, no! Something went wrong.");
             System.out.println(exc.getMessage());

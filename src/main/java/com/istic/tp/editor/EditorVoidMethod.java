@@ -1,12 +1,9 @@
-package com.istic.tp.operatorexpr;
+package com.istic.tp.editor;
 
-import com.istic.tp.ProjectTarget;
+import com.istic.tp.target.ProjectTarget;
 import javassist.CannotCompileException;
 import javassist.CtMethod;
 import javassist.NotFoundException;
-import javassist.bytecode.BadBytecode;
-import javassist.bytecode.CodeIterator;
-import javassist.bytecode.Mnemonic;
 
 public class EditorVoidMethod extends AbstractEditor {
     public EditorVoidMethod(ProjectTarget target) {

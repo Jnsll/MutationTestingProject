@@ -1,11 +1,12 @@
 package com.istic.tp;
 
 
-import com.istic.tp.comparisonexpr.EditorComparisation;
-import com.istic.tp.operatorexpr.AbstractEditor;
-import com.istic.tp.operatorexpr.EditorArithOperator;
-import com.istic.tp.operatorexpr.EditorVoidMethod;
-import com.istic.tp.operone.EditorBooleanMethod;
+import com.istic.tp.editor.EditorComparisation;
+import com.istic.tp.editor.AbstractEditor;
+import com.istic.tp.editor.EditorArithOperator;
+import com.istic.tp.editor.EditorVoidMethod;
+import com.istic.tp.editor.EditorBooleanMethod;
+import com.istic.tp.target.ProjectTarget;
 
 import java.io.File;
 import java.net.URL;
