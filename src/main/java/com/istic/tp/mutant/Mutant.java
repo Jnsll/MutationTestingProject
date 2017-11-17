@@ -1,5 +1,6 @@
 package com.istic.tp.mutant;
 
+import com.istic.tp.mutator.Mutator;
 import javassist.CannotCompileException;
 import javassist.CtMethod;
 import javassist.CtNewMethod;
@@ -18,9 +19,10 @@ public class Mutant {
      */
     private Integer index;
 
+    private Mutator mutator;
 
 
-    public Mutant(CtMethod ctMethod, Integer index) {
+    public Mutant(CtMethod ctMethod, Integer index, Mutator mutator) {
         this.ctMethod = ctMethod;
         try {
             this.initial = CtNewMethod.copy(ctMethod,ctMethod.getDeclaringClass(),null);
@@ -28,6 +30,7 @@ public class Mutant {
             e.printStackTrace();
         }
         this.index = index;
+        this.mutator = mutator;
     }
 
     public CtMethod getCtMethod() {
@@ -40,6 +43,14 @@ public class Mutant {
 
     public CtMethod getInitial() {
         return initial;
+    }
+
+    public Mutator getMutator() {
+        return mutator;
+    }
+
+    public void setMutator(Mutator mutator) {
+        this.mutator = mutator;
     }
 
     @Override

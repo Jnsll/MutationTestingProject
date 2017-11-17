@@ -1,35 +1,39 @@
-package com.istic.tp.editor;
+package com.istic.tp.mutator;
 
 import com.istic.tp.mutant.Mutant;
-import com.istic.tp.target.ProjectTarget;
-import javassist.*;
+import javassist.CannotCompileException;
+import javassist.CtMethod;
 
-public class EditorBooleanMethod extends AbstractEditor {
+import java.util.ArrayList;
+import java.util.List;
 
+public class BooleanMethodMutator extends Mutator {
 
-    public EditorBooleanMethod(ProjectTarget target) {
-        super(target);
-    }
 
     @Override
-    protected void createListMutant(final CtMethod method) {
+    public List<Mutant> createListMutant(final CtMethod method) {
+        // There is only one mutant for a method here
+        // Need to see how to modify this later
+        List<Mutant> mutants = new ArrayList<Mutant>();
+
         try {
             String returnType;
             returnType = method.getReturnType().getName();
             if (returnType.equals("boolean") || returnType.equals("Boolean")) {
-                this.mutants.add(new Mutant(method,null));
+                mutants.add(new Mutant(method,null, this));
 //              System.out.println("MUTANT june: "+method.getName()+":"+"boolean");
             }
-
         }catch(Throwable exc) {
             System.out.println("Oh, no! Something went wrong.");
             System.out.println(exc.getMessage());
             exc.printStackTrace();
         }
+        return mutants;
     }
 
+
     @Override
-    protected void replace(Mutant mutant) {
+    public void doMutate(Mutant mutant) {
         try {
             mutant.getCtMethod().setBody("{return true;}");
             this.write(mutant.getCtMethod().getDeclaringClass());
@@ -37,6 +41,4 @@ public class EditorBooleanMethod extends AbstractEditor {
             e.printStackTrace();
         }
     }
-
-
 }

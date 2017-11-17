@@ -1,13 +1,12 @@
 package com.istic.tp;
 
 import com.istic.tp.editor.AbstractEditor;
-import com.istic.tp.editor.EditorArithOperator;
+import com.istic.tp.mutator.ArithMutator;
 import com.istic.tp.mutant.Mutant;
 import com.istic.tp.target.ProjectTarget;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-import org.junit.Ignore;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -44,7 +43,7 @@ public class AppTest
     public void testRecupMutant()
     {
         ProjectTarget projectTarget = new ProjectTarget(".");
-        AbstractEditor abstractEditor = new EditorArithOperator(projectTarget);
+        AbstractEditor abstractEditor = new ArithMutator(projectTarget);
         abstractEditor.scan("com.istic.tp.mock.Mock");
 
         try {
@@ -68,7 +67,7 @@ public class AppTest
     public void testReplace()
     {
         ProjectTarget projectTarget = new ProjectTarget(".");
-        AbstractEditor abstractEditor = new EditorArithOperator(projectTarget);
+        AbstractEditor abstractEditor = new ArithMutator(projectTarget);
         abstractEditor.scan("com.istic.tp.mock.Mock");
 
         Method method = null;

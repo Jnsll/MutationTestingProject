@@ -1,25 +1,28 @@
-package com.istic.tp.editor;
+package com.istic.tp.mutator;
 
 import com.istic.tp.mutant.Mutant;
-import com.istic.tp.target.ProjectTarget;
-import com.istic.tp.editor.bcoperator.BCOperatorArith;
+import com.istic.tp.mutator.bcoperator.BCOperatorArith;
 import javassist.CtMethod;
 import javassist.bytecode.BadBytecode;
 import javassist.bytecode.CodeIterator;
 import javassist.bytecode.Mnemonic;
 
+import java.util.ArrayList;
+import java.util.List;
 
-public class EditorArithOperator extends AbstractEditor {
+
+public class ArithMutator extends Mutator {
 
 
-    public EditorArithOperator(ProjectTarget target) {
-        super(target);
-    }
+//    public ArithMutator(ProjectTarget target) {
+//        super(target);
+//    }
 
     @Override
-    protected void createListMutant(final CtMethod method) {
+    public List<Mutant> createListMutant(final CtMethod method) {
 
         CodeIterator ci = method.getMethodInfo().getCodeAttribute().iterator();
+        List<Mutant> mutants = new ArrayList<Mutant>();
         while (ci.hasNext()) {
 
             int index = 0;
@@ -34,13 +37,14 @@ public class EditorArithOperator extends AbstractEditor {
 
             if(BCOperatorArith.asByteCode(Mnemonic.OPCODE[op])){
                // System.out.println("MUTANT antoine : "+method.getName()+":"+index);
-                this.mutants.add(new Mutant(method, index));
+                mutants.add(new Mutant(method, index, this));
             }
         }
+        return mutants;
     }
 
     @Override
-    protected void replace(Mutant mutant) {
+    public void doMutate(Mutant mutant) {
         System.out.println("replace");
         CodeIterator iterator = mutant.getCtMethod().getMethodInfo().getCodeAttribute().iterator();
         int op = iterator.byteAt(mutant.getIndex());

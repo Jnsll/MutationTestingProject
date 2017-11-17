@@ -1,36 +1,41 @@
-package com.istic.tp.editor;
+package com.istic.tp.mutator;
 
 import com.istic.tp.mutant.Mutant;
-import com.istic.tp.target.ProjectTarget;
 import javassist.CannotCompileException;
 import javassist.CtMethod;
 import javassist.NotFoundException;
 
-public class EditorVoidMethod extends AbstractEditor {
-    public EditorVoidMethod(ProjectTarget target) {
-        super(target);
-    }
+import java.util.ArrayList;
+import java.util.List;
+
+public class VoidMethodMutator extends Mutator {
+//    public VoidMethodMutator(ProjectTarget target) {
+//        super(target);
+//    }
 
     @Override
-    protected void createListMutant(CtMethod method) {
+    public List<Mutant> createListMutant(CtMethod method) {
+        List<Mutant> mutants = new ArrayList<Mutant>();
         String returnType = "";
         try {
             returnType = method.getReturnType().getName();
         } catch (NotFoundException e) {
             e.printStackTrace();
         }
-       
+
         if(returnType.equals("void") || returnType.equals("Void")){
             if(method.getLongName().contains(".main(java.lang.String[])")){ // don't replace main method body
-                return;
+                //Check if it is right (before was just "return;")
+                return null;
             }
-            this.mutants.add(new Mutant(method,null));
+            mutants.add(new Mutant(method,null, this));
 //          System.out.println("MUTANT antoine: "+method.getName()+":"+"void");
         }
+        return mutants;
     }
 
     @Override
-    protected void replace(Mutant mutant) {
+    public void doMutate(Mutant mutant) {
         try {
             mutant.getCtMethod().setBody("{}");
             this.write(mutant.getCtMethod().getDeclaringClass());

@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Editor of methods
+ * Executor of methods
  */
 public abstract class AbstractEditor {
     /**
