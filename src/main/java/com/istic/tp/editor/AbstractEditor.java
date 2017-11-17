@@ -27,7 +27,7 @@ public abstract class AbstractEditor {
     /**
      * list of mutants. it's feed by the method build
      */
-    final List<Mutant> mutants;
+    List<Mutant> mutants;
 
     public AbstractEditor(ProjectTarget target) {
         this.target = target;
@@ -37,7 +37,7 @@ public abstract class AbstractEditor {
         URL[] urls = new URL[0];
 
         try {
-            urls = new URL[]{ new URL("file://"+this.target.getPathsrc()),new URL("file://"+this.target.getPathsrcTest()) };
+            urls = new URL[]{ new URL("file://"+this.target.getPathsrc()) };
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -49,6 +49,8 @@ public abstract class AbstractEditor {
             }
         }
     }
+
+
 
     /**
      * scan all classes
@@ -99,12 +101,20 @@ public abstract class AbstractEditor {
      */
     protected void write(CtClass cc) {
         try {
-            cc.writeFile(this.target.getPathsrc());
+
+            String name = cc.getURL().toString()
+                    .replaceAll(cc.getName(),"")
+                    .replaceAll("file:","")
+                    .replaceAll("\\.class","");
+
+            cc.writeFile(name);
             cc.defrost(); // modifiable again
 
         } catch (CannotCompileException e) {
             e.printStackTrace();
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (NotFoundException e) {
             e.printStackTrace();
         }
 
