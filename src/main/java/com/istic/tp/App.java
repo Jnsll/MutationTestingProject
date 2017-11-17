@@ -5,7 +5,7 @@ import com.istic.tp.comparisonexpr.EditorComparisation;
 import com.istic.tp.operatorexpr.AbstractEditor;
 import com.istic.tp.operatorexpr.EditorArithOperator;
 import com.istic.tp.operatorexpr.EditorVoidMethod;
-import com.istic.tp.operone.EditorJ;
+import com.istic.tp.operone.EditorBooleanMethod;
 
 import java.io.File;
 import java.net.URL;
@@ -51,14 +51,12 @@ public class App
         afe2.editor();
 
         //tests June
-        AbstractEditor june =new EditorJ(projectTarget);
+        AbstractEditor june =new EditorBooleanMethod(projectTarget);
         june.editor();
 
         //test Elo
         AbstractEditor editorComparisation = new EditorComparisation(projectTarget);
         editorComparisation.editor();
-
-
 
 
 
