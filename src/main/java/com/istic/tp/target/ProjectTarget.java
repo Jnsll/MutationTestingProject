@@ -1,5 +1,9 @@
 package com.istic.tp.target;
 
+import javassist.ClassPool;
+import javassist.CtClass;
+import javassist.CtMethod;
+import javassist.NotFoundException;
 import org.apache.maven.shared.invoker.*;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
@@ -9,9 +13,7 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * Project Maven
@@ -20,16 +22,39 @@ public class ProjectTarget {
     /**
      *
      */
-    private JUnitCore jUnitCore;
+    final private JUnitCore jUnitCore;
     /**
      * path of target project
      */
-    private String path;
+    final private String path;
+
+    /**
+     *ClassPool of target project
+     */
+    private ClassPool pool;
 
 
     public ProjectTarget(String path) {
         this.path = path;
         this.jUnitCore = new JUnitCore();
+        this.pool = ClassPool.getDefault();
+        //TODO : remove the classPath of the source Project
+        //pool.removeClassPath();
+        URL[] urls = new URL[0];
+
+        try {
+            urls = new URL[]{ new URL("file://"+this.getPathsrc()) };
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        for (int i = 0; i < urls.length; i++) {
+            try {
+                pool.insertClassPath(urls[i].getFile());
+            } catch (NotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+
 
 
     }
@@ -41,10 +66,10 @@ public class ProjectTarget {
         final File folder = new File(this.getPathsrcTest());
         try {
 
-                URL[] urls = new URL[]{  new URL("file://"+path+"/target/classes/"),new URL("file://"+path+"/target/test-classes/") };
+            URL[] urls = new URL[]{  new URL("file://"+path+"/target/classes/"),new URL("file://"+path+"/target/test-classes/") };
             URLClassLoader url = new URLClassLoader(urls);
 
-            recursiveLaunchTest(folder,url);
+            launchTest(folder,url);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (MalformedURLException e) {
@@ -64,7 +89,9 @@ public class ProjectTarget {
             System.err.println("the pom file : "+file.getPath()+" doesn't exist in "+this.path);
             return false;
         }
-
+        if(!this.clean()){
+            return false;
+        }
         request.setPomFile(file);
         request.setOutputHandler(line -> { // cache la sortie standard
 
@@ -93,6 +120,10 @@ public class ProjectTarget {
 
     }
 
+    /**
+     * Clean the project target (delete target folder)
+     * @return the clean success
+     */
     public boolean clean(){
         InvocationRequest request = new DefaultInvocationRequest();
         File file = new File( this.path+"/pom.xml" );
@@ -100,9 +131,7 @@ public class ProjectTarget {
             System.err.println("the pom file : "+file.getPath()+" doesn't exist in "+this.path);
             return false;
         }
-        if(!this.clean()){
-            return false;
-        }
+
         request.setPomFile(file);
         request.setOutputHandler(line -> { // cache la sortie standard
 
@@ -132,11 +161,11 @@ public class ProjectTarget {
     }
 
 
-    private void recursiveLaunchTest(final File folder,final URLClassLoader url) throws ClassNotFoundException {
+    private void launchTest(final File folder,final URLClassLoader url) throws ClassNotFoundException {
 
         for (final File fileEntry : folder.listFiles()) {
             if (fileEntry.isDirectory()) {
-                recursiveLaunchTest(fileEntry,url);
+                launchTest(fileEntry,url);
             } else {
 
 
@@ -160,6 +189,87 @@ public class ProjectTarget {
 
             }
         }
+    }
+
+    /**
+     * find the method nameMethod in the class nameClass
+     * return null if the Class or Method  doesn't exist
+     *
+     * @param nameClass path.to.package.NameClass
+     * @param nameMethod
+     * @return return null if the Class or Method  doesn't exist
+     */
+    public CtMethod getMethod(String nameClass,String nameMethod){
+
+        try {
+            CtClass cc = pool.get(nameClass);
+            if(cc.getName().equals(nameClass)) {
+                for (CtMethod ct : cc.getDeclaredMethods()) {
+
+                    if (ct.getName().equals(nameMethod)) {
+                        return ct;
+                    }
+                }
+            }
+        } catch (NotFoundException e) {
+           return null;
+        }
+
+        return null;
+
+    }
+
+    /**
+     * return all methods of the project
+     * @return
+     */
+    public Set<CtMethod> getMethods(){
+
+        final File folder = new File(this.getPathsrc());
+        Set<String> classes = classes = this.findAllClasses(folder);
+        Set<CtMethod> methods = new HashSet<>();
+
+        for(String nameClass : classes) {
+            try {
+                CtClass cc = pool.get(nameClass);
+
+                for (CtMethod ct : cc.getDeclaredMethods()) {
+                    methods.add(ct);
+
+                }
+            } catch (NotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+        return methods;
+    }
+
+
+    /**
+     *
+     * @param folder the folder where we find Class
+     * @return a set of name Class
+     * @throws ClassNotFoundException
+     */
+    private Set<String> findAllClasses(final File folder) {
+        Set<String> classes = new HashSet<>();
+        for (final File fileEntry : folder.listFiles()) {
+            if (fileEntry.isDirectory()) {
+                classes.addAll(findAllClasses(fileEntry));
+            } else {
+
+
+                String name = fileEntry.toString()
+                        .replace(this.getPathsrc(),"")
+                        .replaceAll("\\.class","")
+                        .replaceAll("/",".");
+
+                classes.add(name);
+
+
+            }
+        }
+        return classes;
     }
 
     /**

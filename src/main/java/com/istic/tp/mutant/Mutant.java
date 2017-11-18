@@ -15,11 +15,13 @@ public class Mutant {
      */
     private CtMethod ctMethod;
     /**
-     * Position of byteCode. can be null
+     * the Position of byteCode. can be null
      */
     private Integer index;
-
-    private Mutator mutator;
+    /**
+     * the type of mutator who will apply this mutant
+     */
+    private final Mutator mutator;
 
 
     public Mutant(CtMethod ctMethod, Integer index, Mutator mutator) {
@@ -33,6 +35,24 @@ public class Mutant {
         this.mutator = mutator;
     }
 
+
+    /**
+     * change the byteCode
+     */
+    public void doMutate(){
+        this.mutator.doMutate(this);
+    }
+    /**
+     * return to initial Bytecode
+     */
+    public void revert(){
+        this.mutator.revert(this);
+    }
+
+    public CtMethod getInitial() {
+        return initial;
+    }
+
     public CtMethod getCtMethod() {
         return ctMethod;
     }
@@ -41,24 +61,15 @@ public class Mutant {
         return index;
     }
 
-    public CtMethod getInitial() {
-        return initial;
-    }
-
-    public Mutator getMutator() {
-        return mutator;
-    }
-
-    public void setMutator(Mutator mutator) {
-        this.mutator = mutator;
-    }
-
     @Override
     public String toString() {
         return "Mutant{" +
-                "ctClass=" + ctMethod.getDeclaringClass().getName() +
-                ", ctMethod=" + ctMethod.getName() +
+                "Class=" + ctMethod.getDeclaringClass().getName() +
+                ", Method=" + ctMethod.getName() +
                 ", index=" + index +
+                ", Mutator=" + this.mutator.getClass().getSimpleName() +
                 '}';
     }
+
+
 }

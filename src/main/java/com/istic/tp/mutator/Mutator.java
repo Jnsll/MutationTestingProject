@@ -19,13 +19,18 @@ public abstract class Mutator {
 
     public abstract List<Mutant> createListMutant(final CtMethod method) ;
 
+    /**
+     * Modify the byteCode
+     * @param mutant
+     */
     public abstract void doMutate(Mutant mutant);
 
 
-    // We have to check if it is right to put this method here
+    // june : We have to check if it is right to put this method here
+    // antoine : it's okay for me. Only Mutator change the bytecode
     /**
      * Writes a class file represented by this CtClass cc
-     * @param cc class modif
+     * @param cc class to modify
      */
     protected void write(CtClass cc) {
         try {
@@ -47,15 +52,19 @@ public abstract class Mutator {
         }
     }
 
-    public void revert(CtMethod ct,CtMethod copy) {
+    /**
+     * return to initial Bytecode
+     * @param mutant
+     */
+    public void revert(Mutant mutant) {
 
         try {
-            ct.setBody(copy,null);
+            mutant.getCtMethod().setBody(mutant.getInitial(),null);
         } catch (CannotCompileException e) {
             e.printStackTrace();
         }
 
-        this.write(ct.getDeclaringClass());
+        this.write(mutant.getInitial().getDeclaringClass());
 
     }
 

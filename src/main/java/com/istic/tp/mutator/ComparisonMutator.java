@@ -12,9 +12,6 @@ import java.util.List;
 
 public class ComparisonMutator extends Mutator {
 
-//    public ComparisonMutator(ProjectTarget target) {
-//        super(target);
-//    }
 
     @Override
     public List<Mutant> createListMutant(CtMethod method) {

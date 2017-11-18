@@ -14,10 +14,6 @@ import java.util.List;
 public class ArithMutator extends Mutator {
 
 
-//    public ArithMutator(ProjectTarget target) {
-//        super(target);
-//    }
-
     @Override
     public List<Mutant> createListMutant(final CtMethod method) {
 
@@ -45,10 +41,9 @@ public class ArithMutator extends Mutator {
 
     @Override
     public void doMutate(Mutant mutant) {
-        System.out.println("replace");
+
         CodeIterator iterator = mutant.getCtMethod().getMethodInfo().getCodeAttribute().iterator();
         int op = iterator.byteAt(mutant.getIndex());
-        System.out.println("new "+BCOperatorArith.valueOf(Mnemonic.OPCODE[op]).replace().getConstant());
         iterator.writeByte(BCOperatorArith.valueOf(Mnemonic.OPCODE[op]).replace().getConstant(), mutant.getIndex());
         this.write(mutant.getCtMethod().getDeclaringClass());
     }

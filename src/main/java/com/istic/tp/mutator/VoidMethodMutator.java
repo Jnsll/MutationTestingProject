@@ -9,9 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VoidMethodMutator extends Mutator {
-//    public VoidMethodMutator(ProjectTarget target) {
-//        super(target);
-//    }
+
 
     @Override
     public List<Mutant> createListMutant(CtMethod method) {
@@ -24,12 +22,11 @@ public class VoidMethodMutator extends Mutator {
         }
 
         if(returnType.equals("void") || returnType.equals("Void")){
-            if(method.getLongName().contains(".main(java.lang.String[])")){ // don't replace main method body
-                //Check if it is right (before was just "return;")
-                return null;
+            if(!method.getLongName().contains(".main(java.lang.String[])")){ // don't replace main method body
+//                System.out.println("MUTANT antoine: "+method.getName()+":"+"void");
+                mutants.add(new Mutant(method,null, this));
             }
-            mutants.add(new Mutant(method,null, this));
-//          System.out.println("MUTANT antoine: "+method.getName()+":"+"void");
+
         }
         return mutants;
     }

@@ -12,8 +12,9 @@ public class BooleanMethodMutator extends Mutator {
 
     @Override
     public List<Mutant> createListMutant(final CtMethod method) {
-        // There is only one mutant for a method here
-        // Need to see how to modify this later
+        // june :  There is only one mutant for a method here
+        //         Need to see how to modify this later
+        // Antoine : no need
         List<Mutant> mutants = new ArrayList<Mutant>();
 
         try {
