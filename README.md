@@ -1,13 +1,15 @@
-# MutationTestingProject  [![Build Status](https://travis-ci.com/Jnsll/MutationTestingProject.svg?token=yEvcBv9NYXmyDfvx1xFm&branch=master)](https://travis-ci.com/Jnsll/MutationTestingProject)
+# MutationTestingProject  
+Master : [![Build Status](https://travis-ci.com/Jnsll/MutationTestingProject.svg?token=yEvcBv9NYXmyDfvx1xFm&branch=master)](https://travis-ci.com/Jnsll/MutationTestingProject)
+Feature/rework : [![Build Status](https://travis-ci.com/Jnsll/MutationTestingProject.svg?token=yEvcBv9NYXmyDfvx1xFm&branch=feature/rework)](https://travis-ci.com/Jnsll/MutationTestingProject)
 
 V & V project.
 
 ## In Progress
 
 - [ ] Planning
-- [ ] Choice of Technologies/Tools
-- [ ] Creation of a mock math software
-- [ ] Creation of different branches
+- [x] Choice of Technologies/Tools
+- [x] Creation of a mock math software
+- [x] Creation of different branches
 - [ ] Complete this list
 
 
