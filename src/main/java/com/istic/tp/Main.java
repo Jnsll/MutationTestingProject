@@ -6,7 +6,6 @@ import com.istic.tp.target.ProjectTarget;
 import javassist.CtMethod;
 
 import java.io.File;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -46,15 +45,15 @@ public class Main {
 
         // find mutant
         Scanner scanner = new Scanner(mutators);
-        List<Mutant> mutans = new ArrayList<>();
+        List<Mutant> mutants = new ArrayList<>();
         Set<CtMethod> methods = projectTarget.getMethods();
         for(CtMethod method : methods){
-            mutans.addAll(scanner.scan(method));
+            mutants.addAll(scanner.scan(method));
         }
 
         // apply mutant
-        for(Mutant mutant : mutans){
-           mutant.doMutate(); // c'est plus jolie qu'un executor
+        for(Mutant mutant : mutants){
+           mutant.doMutate(); // c'est plus joli qu'un executor
                               //et ça nous permet de jouer plus facilement dans les tests
            System.out.println(mutant);
            projectTarget.launchTest();
