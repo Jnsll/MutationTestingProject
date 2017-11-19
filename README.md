@@ -1,4 +1,4 @@
-# MutationTestingProject  [![Build Status](https://travis-ci.org/Jnsll/MutationTestingProject.svg?branch=master)](https://travis-ci.org/Jnsll/MutationTestingProject)
+# MutationTestingProject  [![Build Status](https://travis-ci.com/Jnsll/MutationTestingProject.svg?token=yEvcBv9NYXmyDfvx1xFm&branch=master)](https://travis-ci.com/Jnsll/MutationTestingProject)
 
 V & V project.
 
