@@ -13,6 +13,7 @@ import java.util.Set;
 public class Main {
 
     public static void main( String[] args ) throws Throwable {
+
         if(args.length != 1){
             System.err.println("need a location of target project");
             return;
@@ -52,13 +53,8 @@ public class Main {
         }
 
         // apply mutant
-        for(Mutant mutant : mutants){
-           mutant.doMutate(); // c'est plus joli qu'un executor
-                              //et ça nous permet de jouer plus facilement dans les tests
-           System.out.println(mutant);
-           projectTarget.launchTest();
-           mutant.revert();
-        }
+        Executor executor = new Executor();
+        executor.execute(mutants,projectTarget);
 
         //
         projectTarget.clean();
