@@ -1,30 +1,34 @@
 # MutationTestingProject  
 Master : [![Build Status](https://travis-ci.com/Jnsll/MutationTestingProject.svg?token=yEvcBv9NYXmyDfvx1xFm&branch=master)](https://travis-ci.com/Jnsll/MutationTestingProject)
-Feature/rework : [![Build Status](https://travis-ci.com/Jnsll/MutationTestingProject.svg?token=yEvcBv9NYXmyDfvx1xFm&branch=feature/rework)](https://travis-ci.com/Jnsll/MutationTestingProject)
 Dev : [![Build Status](https://travis-ci.com/Jnsll/MutationTestingProject.svg?token=yEvcBv9NYXmyDfvx1xFm&branch=dev)](https://travis-ci.com/Jnsll/MutationTestingProject)
 
 V & V project.
 
 ## Usage
 
-java -jar vandv.mutationtesting.project-1.0-SNAPSHOT-jar-with-dependencies.jar  "path/to/target/object"
+java -jar vandv.mutationtesting.project-1.0-SNAPSHOT-jar-with-dependencies.jar  "path/to/target/project"
 
+Example : java -jar vandv.mutationtesting.project-1.0-SNAPSHOT-jar-with-dependencies.jar  "/home/user/Documents/MasterIL/VV/MockMathSoftware"
 
-## In Progress
+Note : We recommend the use of the MockMathSoftware (https://github.com/Jnsll/MockMathSoftware) as the target project
 
-- [ ] Planning
-- [x] Choice of Technologies/Tools
-- [x] Creation of a mock math software
-- [x] Creation of different branches
-- [ ] Complete this list
+## Left to do
+
+- [ ] Create a maven plugin for the project
+- [ ] Test the VoidMethodMutator (with a mock to test on)
+- [ ] Test the Target Project class
+- [ ] Create a report on how many mutants (and which ones) were detected
+- [ ] Create another mutator (if there's some time left)
+- [ ] Write the report
 
 ## Features
-- Build project target
-- List mutants
-- replace ByteCode
-- Launch Test of Project target
-- List output test
-- undo ByteCode replace
+- Build the target project
+- List the mutants
+- Replace the ByteCode of the target project
+- Launch the tests of the target project
+- List the output of the target tests
+- Revert the change of the ByteCode
+- Test some methods/mutators of the source project (MutationTestingProject) 
 
 ## Resources
 - Javassist
