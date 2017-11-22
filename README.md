@@ -1,6 +1,7 @@
 # MutationTestingProject  
 Master : [![Build Status](https://travis-ci.com/Jnsll/MutationTestingProject.svg?token=yEvcBv9NYXmyDfvx1xFm&branch=master)](https://travis-ci.com/Jnsll/MutationTestingProject)
 Feature/rework : [![Build Status](https://travis-ci.com/Jnsll/MutationTestingProject.svg?token=yEvcBv9NYXmyDfvx1xFm&branch=feature/rework)](https://travis-ci.com/Jnsll/MutationTestingProject)
+Dev : [![Build Status](https://travis-ci.com/Jnsll/MutationTestingProject.svg?token=yEvcBv9NYXmyDfvx1xFm&branch=dev)](https://travis-ci.com/Jnsll/MutationTestingProject)
 
 V & V project.
 
@@ -15,6 +16,9 @@ V & V project.
 
 ## Resources
 - Javassist
+- JUnit
+- Cobertura
+- Travis CI
 
 ## Target project
 - Simple project with basic operations [https://github.com/Jnsll/MockMathSoftware]
