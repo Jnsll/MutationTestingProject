@@ -38,10 +38,10 @@ public class TestMutatorComparison {
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][] {
-                { "isGreater", 1, 2, 164, 161 },
-                { "isLess", 1, 2, 162, 163 },
-                { "isGreaterOrEqual", 1, 2, 161, 164 },
-                { "isLessOrEqual", 1, 2, 163, 162 }
+                { "intIsGreater", 1, 8, 164, 161 },
+                { "intIsLess", 1, 8, 162, 163 },
+                { "intIsGreaterOrEqual", 1, 8, 161, 164 },
+                { "intIsLessOrEqual", 1, 8, 163, 162 }
         });
     }
 

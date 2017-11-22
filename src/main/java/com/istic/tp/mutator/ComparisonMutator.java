@@ -17,6 +17,7 @@ public class ComparisonMutator extends Mutator {
     public List<Mutant> createListMutant(CtMethod method) {
         CodeIterator iterator = method.getMethodInfo().getCodeAttribute().iterator();
         List<Mutant> mutants = new ArrayList<Mutant>();
+        // System.out.println("method: " + method.getName());
         while (iterator.hasNext()) {
             int index = 0;
             try {
@@ -25,9 +26,9 @@ public class ComparisonMutator extends Mutator {
                 badBytecode.printStackTrace();
             }
             int op = iterator.byteAt(index);
-
+            // System.out.println("index: " + index + "-  op: " + op);
             if(BCOperatorComparison.asByteCode(Mnemonic.OPCODE[op])) {
-//                System.out.println("MUTANT emmanuel: "+method.getName()+":"+index);
+                // System.out.println("MUTANT emmanuel: "+method.getName()+":"+index);
                 mutants.add(new Mutant(method, index, this));
             }
         }
