@@ -1,12 +1,14 @@
 package com.istic.tp;
 
+import com.istic.tp.mock.MockArith;
 import com.istic.tp.mutant.Mutant;
 import com.istic.tp.mutator.*;
+import com.istic.tp.mutator.bcoperator.BCOperatorArith;
 import com.istic.tp.target.ProjectTarget;
 import javassist.CtMethod;
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import javassist.bytecode.BadBytecode;
+import javassist.bytecode.CodeIterator;
+
 import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -27,10 +29,10 @@ public class TestMutatorArith {
         @Parameterized.Parameters
         public static Collection<Object[]> data() {
             return Arrays.asList(new Object[][]{
-                    {"addInt", 1}, {"mulInt", 1}, {"divInt", 1}, {"subInt", 1},
-                    {"addLong", 1}, {"mulLong", 1}, {"divLong", 1}, {"subLong", 1},
-                    {"addFloat", 1}, {"mulFloat", 1}, {"divFloat", 1}, {"subFloat", 1},
-                    {"addDouble", 1}, {"mulDouble", 1}, {"divDouble", 1}, {"subDouble", 1}
+                    {"addInt", 1,2,96,100}, {"mulInt", 1,2,104,108}, {"divInt", 1,2,108,104}, {"subInt", 1,2, 100,96},
+                    {"addLong", 1,2,97,101}, {"mulLong", 1,2,105,109}, {"divLong", 1,2,109,105}, {"subLong", 1,2, 101,97},
+                    {"addFloat", 1,2,98,102}, {"mulFloat", 1,2,106,110}, {"divFloat", 1,2,110,106}, {"subFloat", 1,2, 102,98},
+                    {"addDouble", 1,2,99,103}, {"mulDouble", 1,2,107,111}, {"divDouble", 1,2,111,107}, {"subDouble", 1,2, 103,99}
             });
         }
 
@@ -39,6 +41,15 @@ public class TestMutatorArith {
 
         @Parameterized.Parameter(1)
         public int numberMutant;
+
+        @Parameterized.Parameter(2)
+        public int index;
+
+        @Parameterized.Parameter(3)
+        public int initBytecode;
+
+        @Parameterized.Parameter(4)
+        public int mutateBytecode;
 
         /**
          * test every mutant
@@ -63,6 +74,45 @@ public class TestMutatorArith {
             assertEquals(mutant.getCtMethod().getName(), mutant.getInitial().getName());
 
             assertEquals(2, mutant.getIndex().intValue());
+
+        }
+
+        @org.junit.Test
+        public void testMutate() {
+            ProjectTarget target = new ProjectTarget(".");
+            CtMethod method = target.getMethod("com.istic.tp.mock.MockArith", nameMethod);
+            assertNotNull(method);
+            List<Mutator> mutators = new ArrayList<Mutator>();
+            mutators.add(new ArithMutator());
+
+            Scanner scanner = new Scanner(mutators);
+
+            List<Mutant> mutants = scanner.scan(method);
+
+            assertEquals(numberMutant, mutants.size());
+
+            CodeIterator ci = method.getMethodInfo().getCodeAttribute().iterator();
+            assertEquals(initBytecode,ci.byteAt(index));
+            for (Mutant mutant : mutants) {
+                mutant.doMutate();
+            }
+            ci = method.getMethodInfo().getCodeAttribute().iterator();
+            assertEquals(mutateBytecode,ci.byteAt(index));
+            //verif the changement
+
+
+            for (Mutant mutant : mutants) {
+                mutant.revert();
+            }
+
+            ci = method.getMethodInfo().getCodeAttribute().iterator();
+            assertEquals(initBytecode,ci.byteAt(index));
+
+
+
+
+
+
 
         }
 
@@ -92,6 +142,8 @@ public class TestMutatorArith {
             }
 
         }
+
+
 
     }
 }
