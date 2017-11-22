@@ -5,6 +5,11 @@ Dev : [![Build Status](https://travis-ci.com/Jnsll/MutationTestingProject.svg?to
 
 V & V project.
 
+## Usage
+
+java -jar vandv.mutationtesting.project-1.0-SNAPSHOT-jar-with-dependencies.jar  "path/to/target/object"
+
+
 ## In Progress
 
 - [ ] Planning
@@ -13,6 +18,13 @@ V & V project.
 - [x] Creation of different branches
 - [ ] Complete this list
 
+## Features
+- Build project target
+- List mutants
+- replace ByteCode
+- Launch Test of Project target
+- List output test
+- undo ByteCode replace
 
 ## Resources
 - Javassist
