@@ -13,7 +13,7 @@ public class TestMutatorComparison extends TestCase {
 
     public void testComparison() {
         ProjectTarget projectTarget = new ProjectTarget(".");
-        CtMethod ctMethod = projectTarget.getMethod("com.istic.tp.mock.MockComparison", "aEstPlusGrandQueB");
+        CtMethod ctMethod = projectTarget.getMethod("com.istic.tp.mock.MockComparison", "isGreater");
         assertNotNull(ctMethod);
 
         List<Mutator> mutators = new ArrayList<Mutator>();
