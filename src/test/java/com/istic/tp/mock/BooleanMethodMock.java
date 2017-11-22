@@ -6,4 +6,12 @@ public class BooleanMethodMock {
         return a>b;
     }
 
+    public Boolean isInferior(int a, int b) {
+        return a<b;
+    }
+
+    public int intPlusOne(int a) {
+        return a++;
+    }
+
 }
