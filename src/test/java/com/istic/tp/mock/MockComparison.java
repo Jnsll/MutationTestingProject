@@ -21,7 +21,7 @@ public class MockComparison {
         return a < b;
     }
 
-    public boolean longGreaterOrEqual(Long a, Long b) {
+    public boolean longIsGreaterOrEqual(Long a, Long b) {
         return a >= b;
     }
 
@@ -36,7 +36,7 @@ public class MockComparison {
         return a < b;
     }
 
-    public boolean doubleGreaterOrEqual(Double a, Double b) {
+    public boolean doubleIsGreaterOrEqual(Double a, Double b) {
         return a >= b;
     }
 
@@ -51,7 +51,7 @@ public class MockComparison {
         return a < b;
     }
 
-    public boolean floatGreaterOrEqual(Float a, Float b) {
+    public boolean floatIsGreaterOrEqual(Float a, Float b) {
         return a >= b;
     }
 

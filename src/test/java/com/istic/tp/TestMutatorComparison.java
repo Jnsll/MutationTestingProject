@@ -41,7 +41,22 @@ public class TestMutatorComparison {
                 { "intIsGreater", 1, 8, 164, 161 },
                 { "intIsLess", 1, 8, 162, 163 },
                 { "intIsGreaterOrEqual", 1, 8, 161, 164 },
-                { "intIsLessOrEqual", 1, 8, 163, 162 }
+                { "intIsLessOrEqual", 1, 8, 163, 162 },
+
+                { "floatIsGreater", 1, 9, 158, 155 },
+                { "floatIsLess", 1, 9, 156, 157 },
+                { "floatIsGreaterOrEqual", 1, 9, 155, 158 },
+                { "floatIsLessOrEqual", 1, 9, 157, 156 },
+
+                { "longIsGreater", 1, 9, 158, 155 },
+                { "longIsLess", 1, 9, 156, 157 },
+                { "longIsGreaterOrEqual", 1, 9, 155, 158 },
+                { "longIsLessOrEqual", 1, 9, 157, 156 },
+
+                { "doubleIsGreater", 1, 9, 158, 155 },
+                { "doubleIsLess", 1, 9, 156, 157 },
+                { "doubleIsGreaterOrEqual", 1, 9, 155, 158 },
+                { "doubleIsLessOrEqual", 1, 9, 157, 156 }
         });
     }
 
