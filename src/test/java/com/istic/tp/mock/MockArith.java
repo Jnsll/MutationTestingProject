@@ -4,7 +4,96 @@ import org.junit.Test;
 
 public class MockArith {
 
+    // OBJECT
+    //int
+    public Integer mulIntObject (Integer x,Integer y){
 
+        return x*y;
+    }
+
+    public Integer divIntObject (Integer x,Integer y){
+
+        return x/y;
+    }
+
+    public Integer subIntObject (Integer x,Integer y){
+
+        return x-y;
+    }
+
+
+    public Integer addIntObject (Integer x,Integer y){
+
+        return x+y;
+    }
+
+
+    //long
+    public Long addLongObject (Long x,Long y){
+
+        return x+y;
+    }
+
+    public Long mulLongObject (Long x,Long y){
+
+        return x*y;
+    }
+
+    public Long divLongObject (Long x,Long y){
+
+        return x/y;
+    }
+
+    public Long subLongObject (Long x,Long y){
+
+        return x-y;
+    }
+
+    //float
+    public Float addFloatObject (Float x,Float y){
+
+        return x+y;
+    }
+
+    public Float mulFloatObject (Float x,Float y){
+
+        return x*y;
+    }
+
+    public Float divFloatObject (Float x,Float y){
+
+        return x/y;
+    }
+
+    public Float subFloatObject (Float x,Float y){
+
+        return x-y;
+    }
+
+    //Double
+    public Double addDoubleObject (Double x,Double y){
+
+        return x+y;
+    }
+
+    public Double mulDoubleObject (Double x,Double y){
+
+        return x*y;
+    }
+
+    public Double divDoubleObject (Double x,Double y){
+
+        return x/y;
+    }
+
+    public Double subDoubleObject (Double x,Double y){
+
+        return x-y;
+    }
+
+
+    // PRIMARY
+    //int
     public int mulInt (int x,int y){
 
         return x*y;
@@ -20,7 +109,6 @@ public class MockArith {
         return x-y;
     }
 
-    //int
     public int addInt (int x,int y){
 
         return x+y;
@@ -88,6 +176,8 @@ public class MockArith {
 
         return x-y;
     }
+
+
 
     public int fibo(int n) {
         int result = 0;

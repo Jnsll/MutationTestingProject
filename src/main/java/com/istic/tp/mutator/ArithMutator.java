@@ -16,7 +16,7 @@ public class ArithMutator extends Mutator {
 
     @Override
     public List<Mutant> createListMutant(final CtMethod method) {
-
+        //System.out.println(method.getName());
         CodeIterator ci = method.getMethodInfo().getCodeAttribute().iterator();
         List<Mutant> mutants = new ArrayList<Mutant>();
         while (ci.hasNext()) {
@@ -30,7 +30,7 @@ public class ArithMutator extends Mutator {
                 badBytecode.printStackTrace();
             }
             int op = ci.byteAt(index);
-
+            //System.out.println(index+": "+ Mnemonic.OPCODE[op]);
             if(BCOperatorArith.asByteCode(Mnemonic.OPCODE[op])){
                // System.out.println("MUTANT antoine : "+method.getName()+":"+index);
                 mutants.add(new Mutant(method, index, this));

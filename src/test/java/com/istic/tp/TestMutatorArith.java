@@ -25,14 +25,20 @@ public class TestMutatorArith {
 
     @RunWith(Parameterized.class)
     public static class ComponentParamTests {
-        // {namemethod , number mutant }
+        // {namemethod , number mutant, index, bytecode, bytecode mutate }
         @Parameterized.Parameters
         public static Collection<Object[]> data() {
             return Arrays.asList(new Object[][]{
+                    // primary
                     {"addInt", 1,2,96,100}, {"mulInt", 1,2,104,108}, {"divInt", 1,2,108,104}, {"subInt", 1,2, 100,96},
                     {"addLong", 1,2,97,101}, {"mulLong", 1,2,105,109}, {"divLong", 1,2,109,105}, {"subLong", 1,2, 101,97},
                     {"addFloat", 1,2,98,102}, {"mulFloat", 1,2,106,110}, {"divFloat", 1,2,110,106}, {"subFloat", 1,2, 102,98},
-                    {"addDouble", 1,2,99,103}, {"mulDouble", 1,2,107,111}, {"divDouble", 1,2,111,107}, {"subDouble", 1,2, 103,99}
+                    {"addDouble", 1,2,99,103}, {"mulDouble", 1,2,107,111}, {"divDouble", 1,2,111,107}, {"subDouble", 1,2, 103,99},
+                    // object
+                    {"addIntObject", 1,8,96,100}, {"mulIntObject", 1,8,104,108}, {"divIntObject", 1,8,108,104}, {"subIntObject", 1,8, 100,96},
+                    {"addLongObject", 1,8,97,101}, {"mulLongObject", 1,8,105,109}, {"divLongObject", 1,8,109,105}, {"subLongObject", 1,8, 101,97},
+                    {"addFloatObject", 1,8,98,102}, {"mulFloatObject", 1,8,106,110}, {"divFloatObject", 1,8,110,106}, {"subFloatObject", 1,8, 102,98},
+                    {"addDoubleObject", 1,8,99,103}, {"mulDoubleObject", 1,8,107,111}, {"divDoubleObject", 1,8,111,107}, {"subDoubleObject", 1,8, 103,99},
             });
         }
 
@@ -73,7 +79,7 @@ public class TestMutatorArith {
 
             assertEquals(mutant.getCtMethod().getName(), mutant.getInitial().getName());
 
-            assertEquals(2, mutant.getIndex().intValue());
+            assertEquals(index, mutant.getIndex().intValue());
 
         }
 
