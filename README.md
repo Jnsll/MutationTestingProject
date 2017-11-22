@@ -19,6 +19,7 @@ Note : We recommend the use of the MockMathSoftware (https://github.com/Jnsll/Mo
 - [ ] Test the ProjectTarget class
 - [ ] Create a report on how many mutants (and which ones) were detected
 - [ ] Create another mutator (if there's some time left)
+- [ ] Raise the code coverage
 - [ ] Write the report
 
 ## Features
