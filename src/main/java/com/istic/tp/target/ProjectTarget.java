@@ -62,30 +62,23 @@ public class ProjectTarget {
     /**
      * Launch all test
      */
-    public void launchTest(){
+    public void launchTest(Writer writer){
         final File folder = new File(this.getPathsrcTest());
         try {
-
             URL[] urls = new URL[]{  new URL("file://"+path+"/target/classes/"),new URL("file://"+path+"/target/test-classes/") };
             URLClassLoader url = new URLClassLoader(urls);
-            try (Writer writer = new BufferedWriter(new OutputStreamWriter(
-                    new FileOutputStream("report.md"), "utf-8"))) {
-                writer.write("# Test Report\n");
-                launchTest(folder, url, writer);
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } catch (ClassNotFoundException e) {
+            launchTest(folder, url, writer);
+        } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
-        } catch (MalformedURLException e) {
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e1) {
+            e1.printStackTrace();
         }
-
     }
+
 
     /**
      * build the project without test
