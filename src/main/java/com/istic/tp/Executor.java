@@ -20,7 +20,7 @@ public class Executor {
             writer.write("# Test Report\n");
             for (Mutant mutant : mutants) {
                 mutant.doMutate();
-                writer.write("## " + mutant.toString());
+                writer.write("## " + mutant.toString() + "\n");
                 projectTarget.launchTest(writer);
                 mutant.revert();
             }
