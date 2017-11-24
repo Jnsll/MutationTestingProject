@@ -9,7 +9,7 @@ import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
 
-import java.io.File;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -68,8 +68,17 @@ public class ProjectTarget {
 
             URL[] urls = new URL[]{  new URL("file://"+path+"/target/classes/"),new URL("file://"+path+"/target/test-classes/") };
             URLClassLoader url = new URLClassLoader(urls);
-
-            launchTest(folder,url);
+            try (Writer writer = new BufferedWriter(new OutputStreamWriter(
+                    new FileOutputStream("report.md"), "utf-8"))) {
+                writer.write("# Test Report\n");
+                launchTest(folder, url, writer);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (MalformedURLException e) {
@@ -161,11 +170,11 @@ public class ProjectTarget {
     }
 
 
-    private void launchTest(final File folder,final URLClassLoader url) throws ClassNotFoundException {
+    private void launchTest(final File folder,final URLClassLoader url, Writer writer) throws ClassNotFoundException, IOException {
 
         for (final File fileEntry : folder.listFiles()) {
             if (fileEntry.isDirectory()) {
-                launchTest(fileEntry,url);
+                launchTest(fileEntry,url, writer);
             } else {
 
 
@@ -174,19 +183,18 @@ public class ProjectTarget {
                         .replaceAll("/",".");
                 Class simpleClass = url.loadClass(name);
 
-                System.out.println("# " +name);
+                writer.write("## " +name);
                 Result result = jUnitCore.run(simpleClass);
-                System.out.println("## Run Count : "+result.getRunCount());
-                System.out.println("## Ignore Count : "+result.getIgnoreCount());
+                writer.write("\n### Run Count : "+result.getRunCount());
+                writer.write("\n### Ignore Count : "+result.getIgnoreCount());
 
-                System.out.println("## Failure Count : "+result.getFailureCount());
+                writer.write("\n### Failure Count : "+result.getFailureCount() +"\n");
                 for (Failure f : result.getFailures()){
-                    System.out.println("\tname : "+f.getTestHeader());
-                    System.out.println("\t "+f.getException());
-                    System.out.println("\t "+f.getMessage());
+                    writer.write("\tname : "+f.getTestHeader());
+                    writer.write("\t "+f.getException());
+                    writer.write("\t "+f.getMessage());
                 }
-                System.out.println();
-
+                writer.write("\n");
             }
         }
     }
@@ -212,7 +220,7 @@ public class ProjectTarget {
                 }
             }
         } catch (NotFoundException e) {
-           return null;
+            return null;
         }
 
         return null;
