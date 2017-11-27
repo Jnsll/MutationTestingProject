@@ -71,7 +71,7 @@ public class ProjectTarget {
             boolean pass;
             pass = launchTest(folder, url, writer, true);
             if (pass) {
-                writer.write("\t No test fails with this mutant ! \n");
+                writer.write("### This mutant was not killed ! \n");
             }
 
         } catch (UnsupportedEncodingException e) {
@@ -179,13 +179,8 @@ public class ProjectTarget {
                     Result result = jUnitCore.run(simpleClass);
 
                     if (result.getFailureCount()!=0) {
-                        //writer.write("## " +name);
-                        //writer.write("\n### Run Count : "+result.getRunCount());
-                        //writer.write("\n### Ignore Count : "+result.getIgnoreCount());
-
-                        //writer.write("\n### Failure Count : "+result.getFailureCount() +"\n");
                         writer.write("## Test Class : " +name);
-                        writer.write("\n ### Failures : \n");
+                        writer.write("\n ### Mutant killed by the following failure(s) : \n");
                         for (Failure f : result.getFailures()){
                             writer.write("\tname : "+f.getTestHeader());
                             writer.write("\t "+f.getException());
@@ -195,10 +190,6 @@ public class ProjectTarget {
                         writer.write("\n");
                         pass = false;
                     }
-                    // if the class does not fail
-//                else {
-//                    writer.write("\n ### No Fail class \n");
-//                }
                 }
             }
         }
