@@ -20,8 +20,9 @@ public class Executor {
             writer.write("# Test Report\n");
             for (Mutant mutant : mutants) {
                 mutant.doMutate();
+                System.out.println(mutant);
                 writer.write("## " + mutant.toString() + "\n");
-                projectTarget.launchTestMvn(writer); // <-- new
+                writer.write(projectTarget.launchTestMvn()); // <-- new
                 //projectTarget.launchTest(writer);  // <-- old
                 mutant.revert();
             }

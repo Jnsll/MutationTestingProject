@@ -12,7 +12,6 @@ import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
 
 import java.io.*;
-import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -326,40 +325,24 @@ public class ProjectTarget {
 
     /**
      * pars text of  maven test
-     * @param writer
      */
-    public void launchTestMvn(Writer writer){
-        //TODO write a report
+    public String launchTestMvn(){
+
         InvocationRequest request = new DefaultInvocationRequest();
         File file = new File( this.path+"/pom.xml" );
         if(!file.exists()){
             System.err.println("the pom file : "+file.getPath()+" doesn't exist in "+this.path);
 
         }
-        // list of ALL errors;
-        List<String> listError = new ArrayList<>();
-        final boolean[] error = {false};
-        request.setPomFile(file);
 
-        request.setOutputHandler(line -> {
+        // set the parser of output
+        MvnTestOutputHandler myInvocationOutputHandler = new MvnTestOutputHandler();
+        request.setOutputHandler(myInvocationOutputHandler);
 
-            if(line.contains("<<< FAILURE! -")) {
-                System.out.println(line);
-                listError.add(line);
-                error[0] = true;
-            }else if(line.startsWith("Running")){
-                error[0] = false;
-            }else if(error[0]){
-                System.out.println(line);
-                if(!line.isEmpty()) {
-                    listError.add(line);
-                }
-            }
-        });
-
+        // configure mvn command
         List<String> option = new ArrayList<>();
         option.add("surefire:test");
-
+        request.setPomFile(file);
         request.setGoals( option );
         Invoker invoker = new DefaultInvoker();
         invoker.setMavenHome(new File("/usr"));
@@ -374,6 +357,18 @@ public class ProjectTarget {
         }
 
 
+        // return errors
+        if(myInvocationOutputHandler.getListError().size() == 0){
+            return "No fails\n";
+        }
+
+        String result ="";
+        for(String s : myInvocationOutputHandler.getListError()){
+            result=result+s+"\n";
+        }
+
+
+        return result;
     }
 
 
