@@ -67,7 +67,11 @@ public class ProjectTarget {
         try {
             URL[] urls = new URL[]{  new URL("file://"+path+"/target/classes/"),new URL("file://"+path+"/target/test-classes/") };
             URLClassLoader url = new URLClassLoader(urls);
-            launchTest(folder, url, writer);
+            boolean pass;
+            pass = launchTest(folder, url, writer, true);
+            if (pass) {
+                writer.write("\t No test fails with this mutant ! \n");
+            }
 
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -164,11 +168,11 @@ public class ProjectTarget {
     }
 
 
-    private void launchTest(final File folder, final URLClassLoader url, Writer writer) throws ClassNotFoundException, IOException {
+    private boolean launchTest(final File folder, final URLClassLoader url, Writer writer, boolean pass) throws ClassNotFoundException, IOException {
         // boolean pass = true;
         for (final File fileEntry : folder.listFiles()) {
             if (fileEntry.isDirectory()) {
-                launchTest(fileEntry, url, writer);
+                pass = pass && launchTest(fileEntry, url, writer, pass);
             } else {
                 String name = fileEntry.toString().replace(path+"/target/test-classes/","")
                         .replaceAll(".class","")
@@ -192,7 +196,7 @@ public class ProjectTarget {
                     }
                     writer.write("\n");
                     writer.write("\n");
-                    //pass = false;
+                    pass = false;
                 }
                 // if the class does not fail
 //                else {
@@ -200,13 +204,7 @@ public class ProjectTarget {
 //                }
             }
         }
-        //J'aimerais retourner un boolean.
-        // Si l'ensemble des classes tests ne failent pas pour un mutant
-        // J'aimerais afficher pour le mutant un : writer.write("\n ### No Failure for the mutant \n");
-        // Mais je ne peux pas mettre un return ici à cause de la ligne 171
-        // Il va y avoir des returns qui correspondront à l'appel récursif et
-        // donc pas au parcours de toutes les classes tests...
-        //return pass;
+        return pass;
     }
 
     /**

@@ -20,9 +20,11 @@
 	name : testIsBigger(fr.istic.vv.elo.SampleELOTest)	 java.lang.AssertionError	 null
 
 ## Mutant{Class=fr.istic.vv.afe.MathAfe, Method=sub, index=2, Mutator=ArithMutator}
+	 No test fails with this mutant ! 
 ## Mutant{Class=fr.istic.vv.june.OperatorOne, Method=setA, index=null, Mutator=VoidMethodMutator}
 ## Test Class : fr.istic.vv.june.OperatorOneTest
  ### Failures : 
 	name : testDoesAEqualTen(fr.istic.vv.june.OperatorOneTest)	 junit.framework.AssertionFailedError	 null
 
 ## Mutant{Class=fr.istic.vv.june.OperatorOne, Method=setB, index=null, Mutator=VoidMethodMutator}
+	 No test fails with this mutant ! 
