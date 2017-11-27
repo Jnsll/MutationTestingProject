@@ -4,6 +4,7 @@ import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtMethod;
 import javassist.NotFoundException;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.maven.shared.invoker.*;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
@@ -131,7 +132,7 @@ public class ProjectTarget {
      * Clean the project target (delete target folder)
      * @return the clean success
      */
-    public boolean clean(){
+    public boolean clean() {
         InvocationRequest request = new DefaultInvocationRequest();
         File file = new File( this.path+"/pom.xml" );
         if(!file.exists()){
@@ -151,57 +152,54 @@ public class ProjectTarget {
         Invoker invoker = new DefaultInvoker();
         invoker.setMavenHome(new File("/usr"));
 
-        try
-        {
+        try {
             invoker.execute( request );
         }
-        catch (MavenInvocationException e)
-        {
+        catch (MavenInvocationException e) {
             e.printStackTrace();
             System.err.println("Clean fail for project "+this.path);
             return false;
         }
 
         return true;
-
-
     }
 
 
     private boolean launchTest(final File folder, final URLClassLoader url, Writer writer, boolean pass) throws ClassNotFoundException, IOException {
-        // boolean pass = true;
         for (final File fileEntry : folder.listFiles()) {
             if (fileEntry.isDirectory()) {
                 pass = pass && launchTest(fileEntry, url, writer, pass);
             } else {
-                String name = fileEntry.toString().replace(path+"/target/test-classes/","")
-                        .replaceAll(".class","")
-                        .replaceAll("/",".");
-                Class simpleClass = url.loadClass(name);
+                if (FilenameUtils.getExtension(fileEntry.getPath()).equals("class")) {
+                    String name = fileEntry.toString().replace(path+"/target/test-classes/","")
+                            .replaceAll(".class","")
+                            .replaceAll("/",".");
+                    Class simpleClass = url.loadClass(name);
 
-                Result result = jUnitCore.run(simpleClass);
+                    Result result = jUnitCore.run(simpleClass);
 
-                if (result.getFailureCount()!=0) {
-                    //writer.write("## " +name);
-                    //writer.write("\n### Run Count : "+result.getRunCount());
-                    //writer.write("\n### Ignore Count : "+result.getIgnoreCount());
+                    if (result.getFailureCount()!=0) {
+                        //writer.write("## " +name);
+                        //writer.write("\n### Run Count : "+result.getRunCount());
+                        //writer.write("\n### Ignore Count : "+result.getIgnoreCount());
 
-                    //writer.write("\n### Failure Count : "+result.getFailureCount() +"\n");
-                    writer.write("## Test Class : " +name);
-                    writer.write("\n ### Failures : \n");
-                    for (Failure f : result.getFailures()){
-                        writer.write("\tname : "+f.getTestHeader());
-                        writer.write("\t "+f.getException());
-                        writer.write("\t "+f.getMessage());
+                        //writer.write("\n### Failure Count : "+result.getFailureCount() +"\n");
+                        writer.write("## Test Class : " +name);
+                        writer.write("\n ### Failures : \n");
+                        for (Failure f : result.getFailures()){
+                            writer.write("\tname : "+f.getTestHeader());
+                            writer.write("\t "+f.getException());
+                            writer.write("\t "+f.getMessage());
+                        }
+                        writer.write("\n");
+                        writer.write("\n");
+                        pass = false;
                     }
-                    writer.write("\n");
-                    writer.write("\n");
-                    pass = false;
-                }
-                // if the class does not fail
+                    // if the class does not fail
 //                else {
 //                    writer.write("\n ### No Fail class \n");
 //                }
+                }
             }
         }
         return pass;
@@ -216,12 +214,10 @@ public class ProjectTarget {
      * @return return null if the Class or Method  doesn't exist
      */
     public CtMethod getMethod(String nameClass,String nameMethod){
-
         try {
             CtClass cc = pool.get(nameClass);
             if(cc.getName().equals(nameClass)) {
                 for (CtMethod ct : cc.getDeclaredMethods()) {
-
                     if (ct.getName().equals(nameMethod)) {
                         return ct;
                     }
@@ -232,7 +228,6 @@ public class ProjectTarget {
         }
 
         return null;
-
     }
 
     /**
@@ -240,18 +235,17 @@ public class ProjectTarget {
      * @return
      */
     public Set<CtMethod> getMethods(){
-
         final File folder = new File(this.getPathsrc());
-        Set<String> classes = classes = this.findAllClasses(folder);
+        Set<String> classes = this.findAllClasses(folder);
         Set<CtMethod> methods = new HashSet<>();
 
         for(String nameClass : classes) {
             try {
                 CtClass cc = pool.get(nameClass);
-
                 for (CtMethod ct : cc.getDeclaredMethods()) {
-                    methods.add(ct);
-
+                    if (!ct.isEmpty()) { // to avoid add interface methods
+                        methods.add(ct);
+                    }
                 }
             } catch (NotFoundException e) {
                 e.printStackTrace();
@@ -273,16 +267,14 @@ public class ProjectTarget {
             if (fileEntry.isDirectory()) {
                 classes.addAll(findAllClasses(fileEntry));
             } else {
+                if (FilenameUtils.getExtension(fileEntry.getPath()).equals("class")) {
+                    String name = fileEntry.toString()
+                            .replace(this.getPathsrc(),"")
+                            .replaceAll("\\.class","")
+                            .replaceAll("/",".");
 
-
-                String name = fileEntry.toString()
-                        .replace(this.getPathsrc(),"")
-                        .replaceAll("\\.class","")
-                        .replaceAll("/",".");
-
-                classes.add(name);
-
-
+                    classes.add(name);
+                }
             }
         }
         return classes;

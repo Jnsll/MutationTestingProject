@@ -14,26 +14,26 @@ public class Main {
 
     public static void main( String[] args ) throws Throwable {
 
-        if(args.length != 1){
+        if(args.length != 1) {
             System.err.println("need a location of target project");
             return;
         }
 
         File file = new File(args[0]);
 
-        if(!file.exists()){
+        if(!file.exists()) {
             System.err.println("the directory doesn't exist");
             return;
         }
 
-        if(!file.isDirectory()){
+        if(!file.isDirectory()) {
             System.err.println("need a directory, not a file");
             return;
         }
 
         ProjectTarget projectTarget = new ProjectTarget(args[0]);
 
-        if(!projectTarget.build()){
+        if(!projectTarget.build()) {
             return;
         }
 
@@ -48,7 +48,7 @@ public class Main {
         Scanner scanner = new Scanner(mutators);
         List<Mutant> mutants = new ArrayList<>();
         Set<CtMethod> methods = projectTarget.getMethods();
-        for(CtMethod method : methods){
+        for(CtMethod method : methods) {
             mutants.addAll(scanner.scan(method));
         }
 
@@ -56,9 +56,7 @@ public class Main {
         Executor executor = new Executor();
         executor.execute(mutants,projectTarget);
 
-        //
+        // Clean project
         projectTarget.clean();
-
-
     }
 }
