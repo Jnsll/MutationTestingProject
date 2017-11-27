@@ -68,6 +68,7 @@ public class ProjectTarget {
             URL[] urls = new URL[]{  new URL("file://"+path+"/target/classes/"),new URL("file://"+path+"/target/test-classes/") };
             URLClassLoader url = new URLClassLoader(urls);
             launchTest(folder, url, writer);
+
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         } catch (FileNotFoundException e) {
@@ -163,31 +164,39 @@ public class ProjectTarget {
     }
 
 
-    private void launchTest(final File folder,final URLClassLoader url, Writer writer) throws ClassNotFoundException, IOException {
+    private void launchTest(final File folder, final URLClassLoader url, Writer writer) throws ClassNotFoundException, IOException {
 
         for (final File fileEntry : folder.listFiles()) {
             if (fileEntry.isDirectory()) {
-                launchTest(fileEntry,url, writer);
+                launchTest(fileEntry, url, writer);
+
             } else {
-
-
                 String name = fileEntry.toString().replace(path+"/target/test-classes/","")
                         .replaceAll(".class","")
                         .replaceAll("/",".");
                 Class simpleClass = url.loadClass(name);
 
-                writer.write("## " +name);
                 Result result = jUnitCore.run(simpleClass);
-                writer.write("\n### Run Count : "+result.getRunCount());
-                writer.write("\n### Ignore Count : "+result.getIgnoreCount());
 
-                writer.write("\n### Failure Count : "+result.getFailureCount() +"\n");
-                for (Failure f : result.getFailures()){
-                    writer.write("\tname : "+f.getTestHeader());
-                    writer.write("\t "+f.getException());
-                    writer.write("\t "+f.getMessage());
-                }
-                writer.write("\n");
+                if (result.getFailureCount()!=0) {
+                    //writer.write("## " +name);
+                    //writer.write("\n### Run Count : "+result.getRunCount());
+                    //writer.write("\n### Ignore Count : "+result.getIgnoreCount());
+
+                    //writer.write("\n### Failure Count : "+result.getFailureCount() +"\n");
+                    writer.write("## Test Class : " +name);
+                    writer.write("\n ### Failures : \n");
+                    for (Failure f : result.getFailures()){
+                        writer.write("\tname : "+f.getTestHeader());
+                        writer.write("\t "+f.getException());
+                        writer.write("\t "+f.getMessage());
+                    }
+                    writer.write("\n");
+                    writer.write("\n");
+                                    }
+//                else {
+//                    writer.write("\n ### No Fail class \n");
+//                }
             }
         }
     }
