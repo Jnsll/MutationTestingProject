@@ -6,12 +6,14 @@ import javassist.CtMethod;
 import javassist.NotFoundException;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.maven.shared.invoker.*;
+import org.junit.runner.Computer;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
 
 import java.io.*;
 import java.lang.reflect.Method;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -56,9 +58,6 @@ public class ProjectTarget {
                 e.printStackTrace();
             }
         }
-
-
-
     }
 
     /**
@@ -74,15 +73,16 @@ public class ProjectTarget {
             if (pass) {
                 writer.write("### This mutant was not killed ! \n");
             }
-
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        } catch (ClassNotFoundException e1) {
-            e1.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
@@ -143,8 +143,62 @@ public class ProjectTarget {
      * Clean the project target (delete target folder)
      * @return the clean success
      */
-    public boolean clean() {
+    public Set<String> listDependency(){
+        String mavenLocal = this.getLocalRepoMvn();
+        InvocationRequest request = new DefaultInvocationRequest();
+        File file = new File( this.path+"/pom.xml" );
 
+        Set<String> dependency = new HashSet<>();
+        request.setPomFile(file);
+        request.setOutputHandler(line -> {
+            // for each line
+            if(line.endsWith(":compile")) {
+
+                String infoMvn = (line
+                        .replaceAll("\\[INFO\\]", "")
+                        .replaceAll("\\[WARNING\\]", "")
+                        .replaceAll(" ","")
+                        .replaceAll(":compile","")
+                );
+
+                String[] split = infoMvn.split(":");
+                String path = "";
+                for(String s : split[0].split("\\.")){
+                    path = path+"/"+s;
+                }
+
+                dependency.add(mavenLocal + path + "/" + split[1] + "/" + split[3] + "/" + split[1] + "-" + split[3] + "." + split[2]);
+
+
+            }
+
+
+        });
+
+        List<String> option = new ArrayList<>();
+        option.add("dependency:list");
+
+        request.setGoals( option );
+        Invoker invoker = new DefaultInvoker();
+        invoker.setMavenHome(new File("/usr"));
+
+
+        try
+        {
+            invoker.execute( request );
+        }
+        catch (MavenInvocationException e)
+        {
+            e.printStackTrace();
+            System.err.println("Clean fail for project "+this.path);
+
+        }
+        return dependency;
+
+
+    }
+
+    public boolean clean() {
         InvocationRequest request = new DefaultInvocationRequest();
         File file = new File( this.path+"/pom.xml" );
         if(!file.exists()){
@@ -176,7 +230,111 @@ public class ProjectTarget {
         return true;
     }
 
+    /**
+     * NOTE USE
+     * get the local mvn repo of user
+     * @return
+     */
+    private String getLocalRepoMvn(){
+        InvocationRequest request = new DefaultInvocationRequest();
+        final String[] repo = {null};
+        File file = new File( this.path+"/pom.xml" );
+        if(!file.exists()) {
+            System.err.println("the pom file : " + file.getPath() + " doesn't exist in " + this.path);
+            return null;
+        }
 
+        request.setPomFile(file);
+        request.setOutputHandler(line -> {
+            if(!line.startsWith("[INFO]") && !line.startsWith("[WARNING]")){
+                repo[0] = line;
+            }
+
+        });
+
+        List<String> option = new ArrayList<>();
+        option.add("help:evaluate");
+        option.add("-Dexpression=settings.localRepository");
+
+
+        request.setGoals( option );
+        Invoker invoker = new DefaultInvoker();
+        invoker.setMavenHome(new File("/usr"));
+
+        try
+        {
+            invoker.execute( request );
+        }
+        catch (MavenInvocationException e)
+        {
+            e.printStackTrace();
+            System.err.println("Clean fail for project "+this.path);
+
+        }
+
+        return repo[0];
+    }
+
+
+    /**
+     * pars text of  maven test
+     */
+    public String launchTestMvn(){
+
+        InvocationRequest request = new DefaultInvocationRequest();
+        File file = new File( this.path+"/pom.xml" );
+        if(!file.exists()){
+            System.err.println("the pom file : "+file.getPath()+" doesn't exist in "+this.path);
+
+        }
+
+        // set the parser of output
+        MvnTestOutputHandler myInvocationOutputHandler = new MvnTestOutputHandler();
+        request.setOutputHandler(myInvocationOutputHandler);
+
+        // configure mvn command
+        List<String> option = new ArrayList<>();
+        option.add("surefire:test");
+        request.setPomFile(file);
+        request.setGoals( option );
+        Invoker invoker = new DefaultInvoker();
+        invoker.setMavenHome(new File("/usr"));
+
+        try {
+            invoker.execute( request );
+        }
+        catch (MavenInvocationException e) {
+            e.printStackTrace();
+            System.err.println("Launch Test MVN fail for project "+this.path);
+
+        }
+
+
+        // return errors
+        if(myInvocationOutputHandler.getListError().size() == 0){
+            return "The mutant was not killed !\n";
+        }
+
+        String result ="";
+        for(String s : myInvocationOutputHandler.getListError()){
+            result += "The mutant was killed by the following test(s):\n \n";
+            result=result+s+"\n";
+        }
+
+
+        return result;
+    }
+
+    /**
+     * not use @todo remove
+     * @param folder
+     * @param url
+     * @param writer
+     * @param pass
+     * @return
+     * @throws ClassNotFoundException
+     * @throws IOException
+     */
     private boolean launchTest(final File folder, final URLClassLoader url, Writer writer, boolean pass) throws ClassNotFoundException, IOException {
         for (final File fileEntry : folder.listFiles()) {
             if (fileEntry.isDirectory()) {
@@ -184,7 +342,7 @@ public class ProjectTarget {
             } else {
                 if (FilenameUtils.getExtension(fileEntry.getPath()).equals("class")) {
                     String name = fileEntry.toString().replace(path+"/target/test-classes/","")
-                            .replaceAll(".class","")
+                            .replaceAll("\\.class","")
                             .replaceAll("/",".");
                     Class simpleClass = url.loadClass(name);
 
@@ -284,113 +442,6 @@ public class ProjectTarget {
     }
 
     /**
-     *
-     * return the list dependency
-     * @return list of path of jar file
-     */
-    public Set<String> listDependency(){
-        String mavenLocal = this.getLocalRepoMvn();
-        InvocationRequest request = new DefaultInvocationRequest();
-        File file = new File( this.path+"/pom.xml" );
-
-        Set<String> dependency = new HashSet<>();
-        request.setPomFile(file);
-        request.setOutputHandler(line -> {
-            // for each line
-            if(line.endsWith(":compile")) {
-
-                String infoMvn = (line
-                        .replaceAll("\\[INFO\\]", "")
-                        .replaceAll("\\[WARNING\\]", "")
-                        .replaceAll(" ","")
-                        .replaceAll(":compile","")
-                );
-
-                String[] split = infoMvn.split(":");
-                String path = "";
-                for(String s : split[0].split("\\.")){
-                    path = path+"/"+s;
-                }
-
-                dependency.add(mavenLocal + path + "/" + split[1] + "/" + split[3] + "/" + split[1] + "-" + split[3] + "." + split[2]);
-
-
-            }
-
-
-        });
-
-        List<String> option = new ArrayList<>();
-        option.add("dependency:list");
-
-        request.setGoals( option );
-        Invoker invoker = new DefaultInvoker();
-        invoker.setMavenHome(new File("/usr"));
-
-
-        try
-        {
-            invoker.execute( request );
-        }
-        catch (MavenInvocationException e)
-        {
-            e.printStackTrace();
-            System.err.println("Clean fail for project "+this.path);
-
-        }
-        return dependency;
-
-
-    }
-
-    /**
-     *
-     * get the local mvn repo of user
-     * @return
-     */
-    private String getLocalRepoMvn(){
-        InvocationRequest request = new DefaultInvocationRequest();
-        final String[] repo = {null};
-        File file = new File( this.path+"/pom.xml" );
-        if(!file.exists()){
-            System.err.println("the pom file : "+file.getPath()+" doesn't exist in "+this.path);
-
-        }
-
-        request.setPomFile(file);
-        request.setOutputHandler(line -> {
-            if(!line.startsWith("[INFO]") && !line.startsWith("[WARNING]")){
-                repo[0] = line;
-            }
-
-        });
-
-        List<String> option = new ArrayList<>();
-        option.add("help:evaluate");
-        option.add("-Dexpression=settings.localRepository");
-
-
-        request.setGoals( option );
-        Invoker invoker = new DefaultInvoker();
-        invoker.setMavenHome(new File("/usr"));
-
-        try
-        {
-            invoker.execute( request );
-        }
-        catch (MavenInvocationException e)
-        {
-            e.printStackTrace();
-            System.err.println("Clean fail for project "+this.path);
-
-        }
-
-        return repo[0];
-
-
-    }
-
-    /**
      * Path of class files
      * @return
      */
@@ -405,8 +456,5 @@ public class ProjectTarget {
     public String getPathsrcTest(){
         return this.path+"/target/test-classes/";
     }
-
-
-
 
 }
