@@ -29,11 +29,13 @@ public class MvnTestOutputHandler implements InvocationOutputHandler {
 
     @Override
     public void consumeLine(String line) {
+        //System.out.println("[ALL]"+line);
         //TODO : better parser
-        if(line.contains("<<< FAILURE! -")) { // begin of information error
-            listError.add(line);
+        if(line.startsWith("Results :")) { // begin of information error
+            listError.add("### "+line+"\n");
             inError = true;
-        }else if(line.startsWith("Running")){ // pass to other test
+        }else if(inError && line.startsWith("Tests run:")){ // pass to other test
+            listError.add("\n"+line+"\n");
             inError = false;
         }else if(inError){ // continue information error
             if(!line.isEmpty()) {

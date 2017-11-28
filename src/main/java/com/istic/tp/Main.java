@@ -32,7 +32,7 @@ public class Main {
         }
 
         ProjectTarget projectTarget = new ProjectTarget(args[0]);
-
+        System.out.println("[INFO] - Target project is building ...");
         if(!projectTarget.build()){
             return;
         }
@@ -48,15 +48,18 @@ public class Main {
         Scanner scanner = new Scanner(mutators);
         List<Mutant> mutants = new ArrayList<>();
         Set<CtMethod> methods = projectTarget.getMethods();
+        System.out.println("[INFO] - Target project is scanning ...");
         for(CtMethod method : methods){
             mutants.addAll(scanner.scan(method));
         }
 
         // apply mutant
         Executor executor = new Executor();
+        System.out.println("[INFO] - Execute All mutants");
         executor.execute(mutants,projectTarget);
 
         //
+        System.out.println("[INFO] - Target project is cleaning ...");
         projectTarget.clean();
 
 

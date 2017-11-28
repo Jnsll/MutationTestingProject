@@ -92,6 +92,7 @@ public class ProjectTarget {
      * @return the build success
      */
     public boolean build(){
+
         InvocationRequest request = new DefaultInvocationRequest();
         File file = new File( this.path+"/pom.xml" );
         if(!file.exists()){
@@ -139,10 +140,7 @@ public class ProjectTarget {
 
     }
 
-    /**
-     * Clean the project target (delete target folder)
-     * @return the clean success
-     */
+
     public Set<String> listDependency(){
         String mavenLocal = this.getLocalRepoMvn();
         InvocationRequest request = new DefaultInvocationRequest();
@@ -197,7 +195,10 @@ public class ProjectTarget {
 
 
     }
-
+    /**
+     * Clean the project target (delete target folder)
+     * @return the clean success
+     */
     public boolean clean() {
         InvocationRequest request = new DefaultInvocationRequest();
         File file = new File( this.path+"/pom.xml" );
@@ -231,7 +232,7 @@ public class ProjectTarget {
     }
 
     /**
-     * NOTE USE
+     *
      * get the local mvn repo of user
      * @return
      */
@@ -310,14 +311,13 @@ public class ProjectTarget {
         }
 
 
-        // return errors
-        if(myInvocationOutputHandler.getListError().size() == 0){
-            return "The mutant was not killed !\n";
+        // return no error
+        if(myInvocationOutputHandler.getListError().size() <= 2){
+            return "The mutant was not killed !\n\n";
         }
-
-        String result ="";
+        // return errors
+        String result ="The mutant was killed by the following test(s):\n \n";
         for(String s : myInvocationOutputHandler.getListError()){
-            result += "The mutant was killed by the following test(s):\n \n";
             result=result+s+"\n";
         }
 
