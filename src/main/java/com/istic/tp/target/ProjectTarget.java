@@ -359,11 +359,12 @@ public class ProjectTarget {
 
         // return errors
         if(myInvocationOutputHandler.getListError().size() == 0){
-            return "No fails\n";
+            return "The mutant was not killed !\n";
         }
 
         String result ="";
         for(String s : myInvocationOutputHandler.getListError()){
+            result += "The mutant was killed by the following test(s):\n \n";
             result=result+s+"\n";
         }
 
