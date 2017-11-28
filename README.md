@@ -15,7 +15,7 @@ Note : We recommend the use of the MockMathSoftware (https://github.com/Jnsll/Mo
 ## Left to do
 
 - [ ] Create a maven plugin for the project
-- [ ] Test the VoidMethodMutator (with a mock to test on)
+- [x] Test the VoidMethodMutator (with a mock to test on)
 - [ ] Test the ProjectTarget class
 - [ ] Create a report on how many mutants (and which ones) were detected
 - [ ] Create another mutator (if there's some time left)
