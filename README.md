@@ -18,7 +18,6 @@ Note : We recommend the use of the MockMathSoftware (https://github.com/Jnsll/Mo
 - [x] Test the VoidMethodMutator (with a mock to test on)
 - [ ] Test the ProjectTarget class
 - [ ] Create a report on how many mutants (and which ones) were detected
-- [ ] Create another mutator (if there's some time left)
 - [ ] Raise the code coverage
 - [ ] Write the report
 
@@ -26,7 +25,7 @@ Note : We recommend the use of the MockMathSoftware (https://github.com/Jnsll/Mo
 - Build the target project
 - List the mutants
 - Replace the ByteCode of the target project
-- Launch the tests of the target project
+- Launch the tests of the target project  
 - List the output of the target tests
 - Revert the change of the ByteCode
 - Test some methods/mutators of the source project (MutationTestingProject) 
