@@ -22,7 +22,7 @@ public class Executor {
                 mutant.doMutate();
                 System.out.println(mutant);
                 writer.write("## " + mutant.toString() + "\n");
-                writer.write(projectTarget.launchTestMvn()); // <-- new
+                writer.write(projectTarget.launchTest()); // <-- new
                 //projectTarget.launchTest(writer);  // <-- old
                 mutant.revert();
             }

@@ -60,38 +60,12 @@ public class ProjectTarget {
         }
     }
 
-    /**
-     * Launch all test
-     */
-    public void launchTest(Writer writer){
-        final File folder = new File(this.getPathsrcTest());
-        try {
-            URL[] urls = new URL[]{  new URL("file://"+path+"/target/classes/"),new URL("file://"+path+"/target/test-classes/") };
-            URLClassLoader url = new URLClassLoader(urls);
-            boolean pass;
-            pass = launchTest(folder, url, writer, true);
-            if (pass) {
-                writer.write("### This mutant was not killed ! \n");
-            }
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
 
     /**
      * build the project without test
      * @return the build success
      */
-    public boolean build(){
+    public boolean build() {
 
         InvocationRequest request = new DefaultInvocationRequest();
         File file = new File( this.path+"/pom.xml" );
@@ -140,7 +114,10 @@ public class ProjectTarget {
 
     }
 
-
+    /**
+     * list the dependencie of pom.xml target project
+     * @return
+     */
     public Set<String> listDependency(){
         String mavenLocal = this.getLocalRepoMvn();
         InvocationRequest request = new DefaultInvocationRequest();
@@ -188,7 +165,7 @@ public class ProjectTarget {
         catch (MavenInvocationException e)
         {
             e.printStackTrace();
-            System.err.println("Clean fail for project "+this.path);
+
 
         }
         return dependency;
@@ -269,7 +246,7 @@ public class ProjectTarget {
         catch (MavenInvocationException e)
         {
             e.printStackTrace();
-            System.err.println("Clean fail for project "+this.path);
+
 
         }
 
@@ -278,9 +255,10 @@ public class ProjectTarget {
 
 
     /**
-     * pars text of  maven test
+     * launch test via maven
+     * @return the result of test
      */
-    public String launchTestMvn(){
+    public String launchTest(){
 
         InvocationRequest request = new DefaultInvocationRequest();
         File file = new File( this.path+"/pom.xml" );
@@ -311,11 +289,11 @@ public class ProjectTarget {
         }
 
 
-        // return no error
+        // return no fail test
         if(myInvocationOutputHandler.getListError().size() <= 2){
             return "The mutant was not killed !\n\n";
         }
-        // return errors
+        // return fail test
         String result ="The mutant was killed by the following test(s):\n \n";
         for(String s : myInvocationOutputHandler.getListError()){
             result=result+s+"\n";
@@ -325,77 +303,34 @@ public class ProjectTarget {
         return result;
     }
 
-    /**
-     * not use @todo remove
-     * @param folder
-     * @param url
-     * @param writer
-     * @param pass
-     * @return
-     * @throws ClassNotFoundException
-     * @throws IOException
-     */
-    private boolean launchTest(final File folder, final URLClassLoader url, Writer writer, boolean pass) throws ClassNotFoundException, IOException {
-        for (final File fileEntry : folder.listFiles()) {
-            if (fileEntry.isDirectory()) {
-                pass = pass && launchTest(fileEntry, url, writer, pass);
-            } else {
-                if (FilenameUtils.getExtension(fileEntry.getPath()).equals("class")) {
-                    String name = fileEntry.toString().replace(path+"/target/test-classes/","")
-                            .replaceAll("\\.class","")
-                            .replaceAll("/",".");
-                    Class simpleClass = url.loadClass(name);
 
-                    Result result = jUnitCore.run(simpleClass);
-
-                    if (result.getFailureCount()!=0) {
-                        writer.write("## Test Class : " +name);
-                        writer.write("\n ### Mutant killed by the following failure(s) : \n");
-                        for (Failure f : result.getFailures()){
-                            writer.write("\tname : "+f.getTestHeader());
-                            writer.write("\t "+f.getException());
-                            writer.write("\t "+f.getMessage());
-                        }
-                        writer.write("\n");
-                        writer.write("\n");
-                        pass = false;
-                    }
-                }
-            }
-        }
-        return pass;
-    }
 
     /**
      * find the method nameMethod in the class nameClass
      * return null if the Class or Method  doesn't exist
      *
      * @param nameClass path.to.package.NameClass
-     * @param nameMethod
+     * @param nameMethod nameMethod
      * @return return null if the Class or Method  doesn't exist
      */
-    public CtMethod getMethod(String nameClass,String nameMethod){
+    public CtMethod getMethod(String nameClass,String nameMethod) {
         try {
             CtClass cc = pool.get(nameClass);
-            if(cc.getName().equals(nameClass)) {
-                for (CtMethod ct : cc.getDeclaredMethods()) {
-                    if (ct.getName().equals(nameMethod)) {
-                        return ct;
-                    }
-                }
-            }
+            return cc.getDeclaredMethod(nameMethod);
+
         } catch (NotFoundException e) {
+
             return null;
         }
 
-        return null;
+
     }
 
     /**
      * return all methods of the project
      * @return
      */
-    public Set<CtMethod> getMethods(){
+    public Set<CtMethod> getMethods() {
         final File folder = new File(this.getPathsrc());
         Set<String> classes = this.findAllClasses(folder);
         Set<CtMethod> methods = new HashSet<>();
@@ -404,6 +339,7 @@ public class ProjectTarget {
             try {
                 CtClass cc = pool.get(nameClass);
                 for (CtMethod ct : cc.getDeclaredMethods()) {
+
                     if (!ct.isEmpty()) { // to avoid add interface methods
                         methods.add(ct);
                     }

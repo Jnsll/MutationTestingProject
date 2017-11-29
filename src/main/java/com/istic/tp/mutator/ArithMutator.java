@@ -2,6 +2,7 @@ package com.istic.tp.mutator;
 
 import com.istic.tp.mutant.Mutant;
 import com.istic.tp.mutator.bcoperator.BCOperatorArith;
+import com.istic.tp.mutator.bcoperator.BCOperatorComparison;
 import javassist.CtMethod;
 import javassist.bytecode.BadBytecode;
 import javassist.bytecode.CodeIterator;
@@ -43,7 +44,21 @@ public class ArithMutator extends Mutator {
     public void doMutate(Mutant mutant) {
 
         CodeIterator iterator = mutant.getCtMethod().getMethodInfo().getCodeAttribute().iterator();
+        //  verif a cause de javassist
+        if(mutant.getIndex() >= iterator.get().getCodeLength()){
+            System.err.println("Bad Mutant : "+ mutant);
+            return;
+        }
         int op = iterator.byteAt(mutant.getIndex());
+        if(op >= Mnemonic.OPCODE.length){
+            System.err.println("Bad Mutant : "+ mutant);
+            return;
+        }
+        if(!BCOperatorArith.asByteCode(Mnemonic.OPCODE[op])){
+            System.err.println("Bad Mutant : "+ mutant);
+            return;
+        }
+        //
         iterator.writeByte(BCOperatorArith.valueOf(Mnemonic.OPCODE[op]).replace().getConstant(), mutant.getIndex());
         this.write(mutant.getCtMethod().getDeclaringClass());
     }
