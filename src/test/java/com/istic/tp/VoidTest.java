@@ -18,17 +18,18 @@ import static org.junit.Assert.assertEquals;
 
 public class VoidTest {
 
-    CtMethod method;
+    ProjectTarget target;
 
     @Before
     public void initProjectTarget() {
-        ProjectTarget target = new ProjectTarget(".");
-        method = target.getMethod("com.istic.tp.mock.VoidMethodMock", "incrementsCount");
+        target = new ProjectTarget(".");
 
     }
 
     @Test
     public void areMutantsRightForVoidMethodMock() {
+        CtMethod method = target.getMethod("com.istic.tp.mock.VoidMethodMock", "incrementsCount");
+
         assertNotNull(method);
         // Init Boolean mutator
         List<Mutator> mutators = new ArrayList<Mutator>();
@@ -57,6 +58,7 @@ public class VoidTest {
 
     @Test
     public void testMutate() {
+        CtMethod method = target.getMethod("com.istic.tp.mock.VoidMethodMock", "incrementsCount");
 
         assertNotNull(method);
         // Init Void mutator
@@ -80,6 +82,47 @@ public class VoidTest {
         for (Mutant mutant : mutants) {
             mutant.revert();
         }
+
+    }
+
+    @Test
+    public void areMutantsWrongForMethodMock() {
+        CtMethod method = target.getMethod("com.istic.tp.mock.VoidMethodMock", "methodBoolean");
+        assertNotNull(method);
+        // Init Boolean mutator
+        List<Mutator> mutators = new ArrayList<Mutator>();
+        mutators.add(new VoidMethodMutator());
+
+        //Search for mutants for the method
+        Scanner scanner = new Scanner(mutators);
+        List<Mutant> mutants = new ArrayList<>();
+        mutants.addAll(scanner.scan(method));
+
+        assertEquals(mutants.size(), 0);
+
+
+    }
+
+    @Test
+    public void testNotMutate() {
+        CtMethod method = target.getMethod("com.istic.tp.mock.VoidMethodMock", "methodBoolean");
+        assertNotNull(method);
+
+        // Init Boolean mutator
+        List<Mutator> mutators = new ArrayList<Mutator>();
+        mutators.add(new VoidMethodMutator());
+
+        //Search for mutants for the method
+        Scanner scanner = new Scanner(mutators);
+        List<Mutant> mutants = new ArrayList<>();
+        mutants.addAll(scanner.scan(method));
+
+        assertEquals(mutants.size(), 0);
+
+        assertFalse(method.isEmpty());
+
+
+
 
     }
 
