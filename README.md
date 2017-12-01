@@ -14,11 +14,12 @@ Note : We recommend the use of the MockMathSoftware (https://github.com/Jnsll/Mo
 
 ## Left to do
 
-- [ ] Create a maven plugin for the project
+- [ ] Create a maven plugin for the project (In progress)
 - [x] Test the VoidMethodMutator (with a mock to test on)
-- [ ] Test the ProjectTarget class
-- [ ] Create a report on how many mutants (and which ones) were detected
-- [ ] Raise the code coverage
+- [ ] Test the ProjectTarget class (In progress)
+- [ ] Create a report on how many mutants (and which ones) were detected (In progress : Mutant detection score)
+- [ ] Raise the code coverage (In progress)
+- [x] Can be lauched to test a big project (ie. Common Math & Common CLI)
 - [ ] Write the report
 
 ## Features
