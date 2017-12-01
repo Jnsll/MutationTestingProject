@@ -39,4 +39,17 @@ public class BooleanMethodMutator extends Mutator {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void revert(Mutant mutant){
+
+        try {
+            mutant.getCtMethod().setBody(mutant.getInitial(),null);
+        } catch (CannotCompileException e) {
+            e.printStackTrace();
+        }
+
+        this.write(mutant.getInitial().getDeclaringClass());
+
+    }
 }

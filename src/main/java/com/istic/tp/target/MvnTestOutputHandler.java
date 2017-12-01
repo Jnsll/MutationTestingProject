@@ -29,7 +29,7 @@ public class MvnTestOutputHandler implements InvocationOutputHandler {
 
     @Override
     public void consumeLine(String line) {
-        //System.out.println("[ALL]"+line);
+        System.out.println("[ALL]"+line);
         //TODO : better parser
         if(line.startsWith("Results :")) { // begin of information error
             listError.add("### "+line+"\n");

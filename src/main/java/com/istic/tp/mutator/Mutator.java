@@ -26,20 +26,23 @@ public abstract class Mutator {
     public abstract void doMutate(Mutant mutant);
 
 
-    // june : We have to check if it is right to put this method here
-    // antoine : it's okay for me. Only Mutator change the bytecode
     /**
      * Writes a class file represented by this CtClass cc
      * @param cc class to modify
      */
     protected void write(CtClass cc) {
+
         try {
-
-            String name = cc.getURL().toString()
-                    .replaceAll(cc.getName(),"")
-                    .replaceAll("file:","")
-                    .replaceAll("\\.class","");
-
+            String url = cc.getURL().toString();
+            int index = 0;
+            String folderSrc = "/target/classes/";
+            String folderTest = "/target/test-classes/";
+            if(url.contains(folderSrc)){
+               index = url.lastIndexOf(folderSrc) +folderSrc.length();
+            }else if(url.contains(folderTest)){
+                index = url.lastIndexOf(folderTest) + folderTest.length();
+            }
+            String name = url.substring(0,index).replaceAll("file:","");
             cc.writeFile(name);
             cc.defrost(); // modifiable again
 
@@ -56,16 +59,6 @@ public abstract class Mutator {
      * return to initial Bytecode
      * @param mutant
      */
-    public void revert(Mutant mutant) {
-
-        try {
-            mutant.getCtMethod().setBody(mutant.getInitial(),null);
-        } catch (CannotCompileException e) {
-            e.printStackTrace();
-        }
-
-        this.write(mutant.getInitial().getDeclaringClass());
-
-    }
+    public abstract void revert(Mutant mutant) ;
 
 }
