@@ -1,9 +1,9 @@
 package com.istic.tp;
 
 import com.istic.tp.mutant.Mutant;
-import com.istic.tp.mutator.ArithMutator;
 import com.istic.tp.mutator.BooleanMethodMutator;
 import com.istic.tp.mutator.Mutator;
+import com.istic.tp.mutator.VoidMethodMutator;
 import com.istic.tp.target.ProjectTarget;
 import javassist.CtMethod;
 import javassist.bytecode.CodeIterator;
@@ -14,10 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
-
-public class BooleanTest {
-
+public class VoidTest {
 
     ProjectTarget target;
 
@@ -28,12 +27,13 @@ public class BooleanTest {
     }
 
     @Test
-    public void areMutantsRightForBooleanMethodMock() {
-        CtMethod method = target.getMethod("com.istic.tp.mock.BooleanMethodMock", "isSuperior");
+    public void areMutantsRightForVoidMethodMock() {
+        CtMethod method = target.getMethod("com.istic.tp.mock.VoidMethodMock", "incrementsCount");
+
         assertNotNull(method);
         // Init Boolean mutator
         List<Mutator> mutators = new ArrayList<Mutator>();
-        mutators.add(new BooleanMethodMutator());
+        mutators.add(new VoidMethodMutator());
 
         //Search for mutants for the method
         Scanner scanner = new Scanner(mutators);
@@ -41,7 +41,7 @@ public class BooleanTest {
         mutants.addAll(scanner.scan(method));
 
         //Check if there is only one mutant
-        //(with BooleanMethodMutator) for the method isSuperior
+        //(with VoidMethodMutator) for the method incrementsCount
         assertEquals(mutants.size(), 1);
 
 
@@ -58,28 +58,26 @@ public class BooleanTest {
 
     @Test
     public void testMutate() {
-        CtMethod method = target.getMethod("com.istic.tp.mock.BooleanMethodMock", "isSuperior");
+        CtMethod method = target.getMethod("com.istic.tp.mock.VoidMethodMock", "incrementsCount");
+
         assertNotNull(method);
-        assertNotNull(method);
-        // Init Boolean mutator
+        // Init Void mutator
         List<Mutator> mutators = new ArrayList<Mutator>();
-        mutators.add(new BooleanMethodMutator());
+        mutators.add(new VoidMethodMutator());
 
         //Search for mutants for the method
         Scanner scanner = new Scanner(mutators);
         List<Mutant> mutants = new ArrayList<>();
         mutants.addAll(scanner.scan(method));
-
-        //assertEquals(initBytecode,ci.byteAt(index));
+        
         for (Mutant mutant : mutants) {
             mutant.doMutate();
         }
         // Check the mutation
-        CodeIterator ci = method.getMethodInfo().getCodeAttribute().iterator();
-        // check the "true"
-        assertEquals(4,ci.byteAt(0));
-        // check the "return"
-        assertEquals(172,ci.byteAt(1));
+        boolean empty = method.isEmpty();
+        // check if the body is empty
+        assertTrue(empty);
+
 
         for (Mutant mutant : mutants) {
             mutant.revert();
@@ -89,12 +87,11 @@ public class BooleanTest {
 
     @Test
     public void areMutantsWrongForMethodMock() {
-        CtMethod method = target.getMethod("com.istic.tp.mock.BooleanMethodMock", "intPlusOne");
-        assertNotNull(method);
+        CtMethod method = target.getMethod("com.istic.tp.mock.VoidMethodMock", "methodBoolean");
         assertNotNull(method);
         // Init Boolean mutator
         List<Mutator> mutators = new ArrayList<Mutator>();
-        mutators.add(new BooleanMethodMutator());
+        mutators.add(new VoidMethodMutator());
 
         //Search for mutants for the method
         Scanner scanner = new Scanner(mutators);
@@ -108,12 +105,12 @@ public class BooleanTest {
 
     @Test
     public void testNotMutate() {
-        CtMethod method = target.getMethod("com.istic.tp.mock.BooleanMethodMock", "intPlusOne");
+        CtMethod method = target.getMethod("com.istic.tp.mock.VoidMethodMock", "methodBoolean");
         assertNotNull(method);
-        assertNotNull(method);
+
         // Init Boolean mutator
         List<Mutator> mutators = new ArrayList<Mutator>();
-        mutators.add(new BooleanMethodMutator());
+        mutators.add(new VoidMethodMutator());
 
         //Search for mutants for the method
         Scanner scanner = new Scanner(mutators);
@@ -122,11 +119,8 @@ public class BooleanTest {
 
         assertEquals(mutants.size(), 0);
 
-        CodeIterator ci = method.getMethodInfo().getCodeAttribute().iterator();
-        // check the "true"
-        assertNotEquals(4,ci.byteAt(0));
-        // check the "return"
-        assertNotEquals(172,ci.byteAt(1));
+        assertFalse(method.isEmpty());
+
 
 
 
@@ -134,4 +128,3 @@ public class BooleanTest {
 
 
 }
-

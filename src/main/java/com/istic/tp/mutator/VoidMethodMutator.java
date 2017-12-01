@@ -21,7 +21,7 @@ public class VoidMethodMutator extends Mutator {
             e.printStackTrace();
         }
 
-        if(returnType.equals("void") || returnType.equals("Void")){
+        if(returnType.equalsIgnoreCase("void")){
             if(!method.getLongName().contains(".main(java.lang.String[])")){ // don't replace main method body
 //                System.out.println("MUTANT antoine: "+method.getName()+":"+"void");
                 mutants.add(new Mutant(method,null, this));

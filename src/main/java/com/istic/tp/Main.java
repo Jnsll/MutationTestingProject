@@ -14,25 +14,35 @@ public class Main {
 
     public static void main( String[] args ) throws Throwable {
 
-        if(args.length != 1){
-            System.err.println("need a location of target project");
+        if(args.length != 2){
+            System.err.println("needs 2 arguments : <location of the target project> <path to the directory for the report output>");
             return;
         }
 
-        File file = new File(args[0]);
-
-        if(!file.exists()){
-            System.err.println("the directory doesn't exist");
+        File directoryProject = new File(args[0]);
+        File directoryOutput = new File(args[1]);
+        if(!directoryProject.exists()){
+            System.err.println("the directory target project doesn't exist");
             return;
         }
 
-        if(!file.isDirectory()){
-            System.err.println("need a directory, not a file");
+        if(!directoryProject.isDirectory()){
+            System.err.println("needs a directory for target project, not a file");
+            return;
+        }
+
+        if(!directoryOutput.exists()){
+            System.err.println("the directory for the output report doesn't exist");
+            return;
+        }
+
+        if(!directoryProject.isDirectory()){
+            System.err.println("needs a directory for the output report, not a file");
             return;
         }
 
         ProjectTarget projectTarget = new ProjectTarget(args[0]);
-
+        System.out.println("[INFO] - Target project is building ...");
         if(!projectTarget.build()){
             return;
         }
@@ -48,15 +58,18 @@ public class Main {
         Scanner scanner = new Scanner(mutators);
         List<Mutant> mutants = new ArrayList<>();
         Set<CtMethod> methods = projectTarget.getMethods();
+        System.out.println("[INFO] - Target project is scanning ...");
         for(CtMethod method : methods){
             mutants.addAll(scanner.scan(method));
         }
 
         // apply mutant
         Executor executor = new Executor();
-        executor.execute(mutants,projectTarget);
+        System.out.println("[INFO] - Execute All mutants");
+        executor.execute(mutants,projectTarget,args[1]);
 
         //
+        System.out.println("[INFO] - Target project is cleaning ...");
         projectTarget.clean();
 
 
