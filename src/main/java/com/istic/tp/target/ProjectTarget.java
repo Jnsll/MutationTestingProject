@@ -39,6 +39,10 @@ public class ProjectTarget {
 
 
     public ProjectTarget(String path) {
+        if(!path.substring(path.length()-1,path.length()).equals("/")){
+            path = path.concat("/");
+        }
+        System.out.println(path);
         this.path = path;
         this.jUnitCore = new JUnitCore();
         this.pool = ClassPool.getDefault();
@@ -68,7 +72,7 @@ public class ProjectTarget {
     public boolean build() {
 
         InvocationRequest request = new DefaultInvocationRequest();
-        File file = new File( this.path+"/pom.xml" );
+        File file = new File( this.path+"pom.xml" );
         if(!file.exists()){
             System.err.println("the pom file : "+file.getPath()+" doesn't exist in "+this.path);
             return false;
@@ -121,7 +125,7 @@ public class ProjectTarget {
     public Set<String> listDependency(){
         String mavenLocal = this.getLocalRepoMvn();
         InvocationRequest request = new DefaultInvocationRequest();
-        File file = new File( this.path+"/pom.xml" );
+        File file = new File( this.path+"pom.xml" );
 
         Set<String> dependency = new HashSet<>();
         request.setPomFile(file);
@@ -178,7 +182,7 @@ public class ProjectTarget {
      */
     public boolean clean() {
         InvocationRequest request = new DefaultInvocationRequest();
-        File file = new File( this.path+"/pom.xml" );
+        File file = new File( this.path+"pom.xml" );
         if(!file.exists()){
             System.err.println("the pom file : "+file.getPath()+" doesn't exist in "+this.path);
             return false;
@@ -216,7 +220,7 @@ public class ProjectTarget {
     private String getLocalRepoMvn(){
         InvocationRequest request = new DefaultInvocationRequest();
         final String[] repo = {null};
-        File file = new File( this.path+"/pom.xml" );
+        File file = new File( this.path+"pom.xml" );
         if(!file.exists()) {
             System.err.println("the pom file : " + file.getPath() + " doesn't exist in " + this.path);
             return null;
@@ -261,7 +265,7 @@ public class ProjectTarget {
     public String launchTest(){
 
         InvocationRequest request = new DefaultInvocationRequest();
-        File file = new File( this.path+"/pom.xml" );
+        File file = new File( this.path+"pom.xml" );
         if(!file.exists()){
             System.err.println("the pom file : "+file.getPath()+" doesn't exist in "+this.path);
 
@@ -382,7 +386,7 @@ public class ProjectTarget {
      * @return
      */
     public String getPathsrc(){
-        return this.path+"/target/classes/";
+        return this.path+"target/classes/";
     }
 
     /**
@@ -390,7 +394,7 @@ public class ProjectTarget {
      * @return
      */
     public String getPathsrcTest(){
-        return this.path+"/target/test-classes/";
+        return this.path+"target/test-classes/";
     }
 
 }
