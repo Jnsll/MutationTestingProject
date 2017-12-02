@@ -15,6 +15,10 @@ public class Executor {
      * @param projectTarget launch test
      */
     public void execute(List<Mutant> mutants, ProjectTarget projectTarget,String outputDirectory) {
+        int killed = 0;
+        int inProgress = 0;
+        int total= mutants.size();
+
         try (Writer writer = new BufferedWriter(new OutputStreamWriter(
                 new FileOutputStream(outputDirectory+"/report.md"), "utf-8"))) {
             writer.write("# Test Report\n");
@@ -22,9 +26,24 @@ public class Executor {
                 mutant.doMutate();
                 System.out.println(mutant);
                 writer.write("## " + mutant.toString() + "\n");
-                writer.write(projectTarget.launchTest());
+                String result = projectTarget.launchTest();
+                //TODO : improve
+                if(result.startsWith("The mutant was killed")){
+                    System.out.println("Result : killed");
+                    killed++;
+                }else{
+                    System.out.println("Result : not killed");
+                }
+
+
+                writer.write(result);
                 mutant.revert();
+                inProgress++;
+                System.out.println(inProgress +" on "+total);
+                System.out.println("kill : "+killed);
+                System.out.println((new Float((float)killed/inProgress))*100+"% killed");
             }
+            writer.write("\n\n"+killed+ " killed on "+total+" mutants");
         } catch (IOException e) {
             e.printStackTrace();
         }
