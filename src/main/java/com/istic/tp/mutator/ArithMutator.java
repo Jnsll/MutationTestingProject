@@ -19,20 +19,7 @@ public class ArithMutator extends Mutator {
 
     @Override
     public List<Mutant> createListMutant(final CtMethod method) {
-        CtMethod copy = null;
-        try {
 
-            copy = CtNewMethod.copy(method,method.getDeclaringClass(),null);
-        } catch (CannotCompileException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            method.setBody(copy,null);
-            this.write(method.getDeclaringClass());
-        } catch (CannotCompileException e) {
-            e.printStackTrace();
-        }
         CodeIterator ci = method.getMethodInfo().getCodeAttribute().iterator();
         List<Mutant> mutants = new ArrayList<Mutant>();
         while (ci.hasNext()) {
@@ -66,6 +53,11 @@ public class ArithMutator extends Mutator {
         iterator.writeByte(BCOperatorArith.valueOf(Mnemonic.OPCODE[op]).replace().getConstant(), mutant.getIndex());
 
         this.write(mutant.getCtMethod().getDeclaringClass());
+    }
+
+    @Override
+    public void revert(Mutant mutant) {
+        this.doMutate(mutant);
     }
 
 

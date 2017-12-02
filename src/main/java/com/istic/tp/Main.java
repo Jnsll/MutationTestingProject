@@ -48,19 +48,30 @@ public class Main {
         }
 
         // Init all mutator
-        List<Mutator> mutators = new ArrayList<Mutator>();
-        mutators.add(new BooleanMethodMutator());
-        mutators.add(new VoidMethodMutator());
-        mutators.add(new ArithMutator());
-        mutators.add(new ComparisonMutator());
+        List<Mutator> mutatorsByByte = new ArrayList<Mutator>();
+
+        List<Mutator> mutatorsByCode = new ArrayList<Mutator>();
+        mutatorsByCode.add(new BooleanMethodMutator());
+        mutatorsByCode.add(new VoidMethodMutator());
+        mutatorsByByte.add(new ArithMutator());
+        mutatorsByByte.add(new ComparisonMutator());
 
         // find mutant
-        Scanner scanner = new Scanner(mutators);
+        Scanner scannerByte = new Scanner(mutatorsByByte);
+        Scanner scannerCode = new Scanner(mutatorsByCode);
         List<Mutant> mutants = new ArrayList<>();
         Set<CtMethod> methods = projectTarget.getMethods();
+
+
         System.out.println("[INFO] - Target project is scanning ...");
+
+
         for(CtMethod method : methods){
-            mutants.addAll(scanner.scan(method));
+            mutants.addAll(scannerByte.scan(method));
+        }
+
+        for(CtMethod method : methods){
+            mutants.addAll(scannerCode.scan(method));
         }
 
         // apply mutant
