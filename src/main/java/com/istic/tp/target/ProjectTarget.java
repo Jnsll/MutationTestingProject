@@ -23,10 +23,7 @@ import java.util.*;
  * Project Maven
  */
 public class ProjectTarget {
-    /**
-     *
-     */
-    final private JUnitCore jUnitCore;
+
     /**
      * path of target project
      */
@@ -42,9 +39,8 @@ public class ProjectTarget {
         if(!path.substring(path.length()-1,path.length()).equals("/")){
             path = path.concat("/");
         }
-        System.out.println(path);
         this.path = path;
-        this.jUnitCore = new JUnitCore();
+
         this.pool = ClassPool.getDefault();
         //TODO : remove the classPath of the source Project
         //pool.removeClassPath();
@@ -81,25 +77,30 @@ public class ProjectTarget {
             return false;
         }
         request.setPomFile(file);
-        request.setOutputHandler(line -> { // cache la sortie standard
-
+        request.setOutputHandler(line -> {
+           // cache la sortie maven
         });
 
         List<String> option = new ArrayList<>();
         option.add("package");
-        option.add("-DskipTests");
         request.setGoals( option );
         Invoker invoker = new DefaultInvoker();
         invoker.setMavenHome(new File("/usr"));
 
         try
         {
-            invoker.execute( request );
+            InvocationResult result =  invoker.execute( request );
+            if ( result.getExitCode() != 0 )
+            {
+               System.err.println("[ERROR] - Build fail for project "+this.path+"\n[ERROR] - All tests must succeed");
+               return false;
+            }
         }
         catch (MavenInvocationException e)
         {
-            e.printStackTrace();
-            System.err.println("Build fail for project "+this.path);
+
+
+            System.err.println("Build fail for project "+this.path+"\nAll tests must succeed");
             return false;
         }
         Set<String> dependency = this.listDependency();
