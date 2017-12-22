@@ -7,9 +7,9 @@ V & V project.
 ## Usage
 
 
-java -jar vandv.mutationtesting.project-1.0-SNAPSHOT-jar-with-dependencies.jar  "path/to/target/project" "path/to/save/report"
+java -jar MutationTestingProject.jar  "path/to/target/project" "path/to/save/report"
 
-Example : java -jar vandv.mutationtesting.project-1.0-SNAPSHOT-jar-with-dependencies.jar  "/home/user/Documents/MasterIL/VV/MockMathSoftware" "/home/user/Documents/"
+Example : java -jar MutationTestingProject.jar  "/home/user/Documents/MasterIL/VV/MockMathSoftware" "/home/user/Documents/"
 
 
 ## Left to do
