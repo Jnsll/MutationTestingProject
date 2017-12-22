@@ -1,11 +1,8 @@
 package com.istic.tp.mutator;
 
 import com.istic.tp.mutant.Mutant;
-
 import com.istic.tp.mutator.bcoperator.BCOperatorComparison;
-
 import javassist.CtMethod;
-
 import javassist.bytecode.BadBytecode;
 import javassist.bytecode.CodeIterator;
 import javassist.bytecode.Mnemonic;
@@ -21,7 +18,7 @@ public class ComparisonMutator extends Mutator {
 
         CodeIterator iterator = method.getMethodInfo().getCodeAttribute().iterator();
         List<Mutant> mutants = new ArrayList<Mutant>();
-        // System.out.println("method: " + method.getName());
+
         while (iterator.hasNext()) {
             int index = 0;
             try {
@@ -30,10 +27,9 @@ public class ComparisonMutator extends Mutator {
                 badBytecode.printStackTrace();
             }
             int op = iterator.byteAt(index);
-            // System.out.println("index: " + index + "-  op: " + op);
+
             if(BCOperatorComparison.asByteCode(Mnemonic.OPCODE[op])) {
-                // System.out.println("MUTANT emmanuel: "+method.getName()+":"+index);
-                mutants.add(new Mutant(method, index, this));
+               mutants.add(new Mutant(method, index, this));
             }
         }
 

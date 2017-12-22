@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class MvnTestOutputHandler implements InvocationOutputHandler {
     /**
-     * if true then there are informations errors
+     * if true then there are useful informations about errors
      */
     private Boolean inError;
 
@@ -23,14 +23,11 @@ public class MvnTestOutputHandler implements InvocationOutputHandler {
         inError=false;
     }
 
-    public List<String> getListError() {
-        return listError;
-    }
+
 
     @Override
     public void consumeLine(String line) {
-        //System.out.println("[ALL]"+line);
-        //TODO : better parser
+
         if(line.startsWith("Results :")) { // begin of information error
             listError.add("### "+line+"\n");
             inError = true;
@@ -42,5 +39,9 @@ public class MvnTestOutputHandler implements InvocationOutputHandler {
                 listError.add(line);
             }
         }
+    }
+
+    public List<String> getListError() {
+        return listError;
     }
 }

@@ -15,29 +15,29 @@ public class Main {
     public static void main( String[] args ) throws Throwable {
 
         if(args.length != 2){
-            System.err.println("needs 2 arguments : <location of the target project> <path to the directory for the report output>");
+            System.err.println("[ERROR] - needs 2 arguments : <location of the target project> <path to the directory for the report output>");
             return;
         }
 
         File directoryProject = new File(args[0]);
         File directoryOutput = new File(args[1]);
         if(!directoryProject.exists()){
-            System.err.println("the directory target project doesn't exist");
+            System.err.println("[ERROR] - the directory target project doesn't exist");
             return;
         }
 
         if(!directoryProject.isDirectory()){
-            System.err.println("needs a directory for target project, not a file");
+            System.err.println("[ERROR] - needs a directory for target project, not a file");
             return;
         }
 
         if(!directoryOutput.exists()){
-            System.err.println("the directory for the output report doesn't exist");
+            System.err.println("[ERROR] - the directory for the output report doesn't exist");
             return;
         }
 
         if(!directoryProject.isDirectory()){
-            System.err.println("needs a directory for the output report, not a file");
+            System.err.println("[ERROR] - needs a directory for the output report, not a file");
             return;
         }
 
@@ -79,7 +79,6 @@ public class Main {
         System.out.println("[INFO] - Execute All mutants");
         executor.execute(mutants,projectTarget,args[1]);
 
-        //
         System.out.println("[INFO] - Target project is cleaning ...");
         projectTarget.clean();
 

@@ -6,11 +6,11 @@ V & V project.
 
 ## Usage
 
-java -jar vandv.mutationtesting.project-1.0-SNAPSHOT-jar-with-dependencies.jar  "path/to/target/project"
 
-Example : java -jar vandv.mutationtesting.project-1.0-SNAPSHOT-jar-with-dependencies.jar  "/home/user/Documents/MasterIL/VV/MockMathSoftware"
+java -jar vandv.mutationtesting.project-1.0-SNAPSHOT-jar-with-dependencies.jar  "path/to/target/project" "path/to/save/report"
 
-Note : We recommend the use of the MockMathSoftware (https://github.com/Jnsll/MockMathSoftware) as the target project
+Example : java -jar vandv.mutationtesting.project-1.0-SNAPSHOT-jar-with-dependencies.jar  "/home/user/Documents/MasterIL/VV/MockMathSoftware" "/home/user/Documents/"
+
 
 ## Left to do
 
@@ -20,7 +20,7 @@ Note : We recommend the use of the MockMathSoftware (https://github.com/Jnsll/Mo
 - [ ] Create a report on how many mutants (and which ones) were detected (In progress : Mutant detection score)
 - [ ] Raise the code coverage (In progress)
 - [x] Can be lauched to test a big project (ie. Common Math & Common CLI)
-- [ ] Write the report
+- [x] Write the report
 
 ## Features
 - Build the target project

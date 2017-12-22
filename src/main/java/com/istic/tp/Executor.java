@@ -27,7 +27,7 @@ public class Executor {
                 System.out.println(mutant);
                 writer.write("## " + mutant.toString() + "\n");
                 String result = projectTarget.launchTest();
-                //TODO : improve
+
                 if(result.startsWith("The mutant was killed")){
                     System.out.println("Result : killed");
                     killed++;

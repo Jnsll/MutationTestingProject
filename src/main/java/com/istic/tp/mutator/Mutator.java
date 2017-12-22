@@ -27,6 +27,12 @@ public abstract class Mutator {
 
 
     /**
+     * return to initial Bytecode
+     * @param mutant
+     */
+    public abstract void revert(Mutant mutant) ;
+
+    /**
      * Writes a class file represented by this CtClass cc
      * @param cc class to modify
      */
@@ -55,10 +61,6 @@ public abstract class Mutator {
         }
     }
 
-    /**
-     * return to initial Bytecode
-     * @param mutant
-     */
-    public abstract void revert(Mutant mutant) ;
+
 
 }

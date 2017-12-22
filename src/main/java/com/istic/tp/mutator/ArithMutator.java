@@ -2,10 +2,7 @@ package com.istic.tp.mutator;
 
 import com.istic.tp.mutant.Mutant;
 import com.istic.tp.mutator.bcoperator.BCOperatorArith;
-import com.istic.tp.mutator.bcoperator.BCOperatorComparison;
-import javassist.CannotCompileException;
 import javassist.CtMethod;
-import javassist.CtNewMethod;
 import javassist.bytecode.BadBytecode;
 import javassist.bytecode.CodeIterator;
 import javassist.bytecode.Mnemonic;
@@ -33,9 +30,8 @@ public class ArithMutator extends Mutator {
                 badBytecode.printStackTrace();
             }
             int op = ci.byteAt(index);
-            //System.out.println(index+": "+ Mnemonic.OPCODE[op]);
+
             if(BCOperatorArith.asByteCode(Mnemonic.OPCODE[op])){
-               // System.out.println("MUTANT antoine : "+method.getName()+":"+index);
                 mutants.add(new Mutant(method, index, this));
             }
         }

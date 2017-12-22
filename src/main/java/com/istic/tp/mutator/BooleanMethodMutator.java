@@ -19,7 +19,6 @@ public class BooleanMethodMutator extends Mutator {
             returnType = method.getReturnType().getName();
             if (returnType.equalsIgnoreCase("boolean")) {
                 mutants.add(new Mutant(method,null, this));
-//              System.out.println("MUTANT june: "+method.getName()+":"+"boolean");
             }
         }catch(Throwable exc) {
             System.out.println("Oh, no! Something went wrong.");

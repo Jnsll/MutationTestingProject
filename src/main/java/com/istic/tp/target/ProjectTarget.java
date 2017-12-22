@@ -6,18 +6,14 @@ import javassist.CtMethod;
 import javassist.NotFoundException;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.maven.shared.invoker.*;
-import org.junit.runner.Computer;
-import org.junit.runner.JUnitCore;
-import org.junit.runner.Result;
-import org.junit.runner.notification.Failure;
 
-import java.io.*;
-import java.lang.reflect.Method;
-import java.io.*;
+import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Project Maven
@@ -42,8 +38,7 @@ public class ProjectTarget {
         this.path = path;
 
         this.pool = ClassPool.getDefault();
-        //TODO : remove the classPath of the source Project
-        //pool.removeClassPath();
+
         URL[] urls = new URL[0];
 
         try {
@@ -62,7 +57,7 @@ public class ProjectTarget {
 
 
     /**
-     * build the project without test
+     * build the project with test
      * @return the build success
      */
     public boolean build() {
@@ -100,7 +95,7 @@ public class ProjectTarget {
         {
 
 
-            System.err.println("Build fail for project "+this.path+"\nAll tests must succeed");
+            System.err.println("[ERROR] - Build fail for project "+this.path+"\n[ERROR] - All tests must succeed");
             return false;
         }
         Set<String> dependency = this.listDependency();

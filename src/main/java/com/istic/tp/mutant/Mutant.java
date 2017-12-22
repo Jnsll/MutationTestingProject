@@ -7,7 +7,7 @@ import javassist.CtNewMethod;
 
 public class Mutant {
     /**
-     * copy of Method before replace byteCode
+     * copy of Method before replace. can be null
      */
     private CtMethod initial;
     /**
